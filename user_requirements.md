@@ -16,16 +16,16 @@ The tool must satisfied good scientific programming best standards and conform w
 ## Requirements
 ### Functional
 Tool will automate the creation/curation of BED files improving efficiency, removing the risk of manual errors, and allowing faster uptake of information of new transcript information into genomic pipelines.
-	* Tool will be used by a CLinical Bioinformatician as per a specification for a BED file from a Clinical Scientist.
-	* A log file detailing creation of the BED file should be produced so that the full providence of a BED file can be retrieved at a later date for troubleshooting purposes.
+- Tool will be used by a CLinical Bioinformatician as per a specification for a BED file from a Clinical Scientist.
+- A log file detailing creation of the BED file should be produced so that the full providence of a BED file can be retrieved at a later date for troubleshooting purposes.
 
 ### Technical (non-functional)
 To conform with ISO, UKAS, and in-house standards:
-	* Code must be well commented and make use of docstrings.
-	* Any Python code should follow PEP8 style format.
-	* A README.md file should be present and provide guidance on using the tool.
-	* Critical code should be covered by unit tests.
-	* Tool should produce log files detailing the steps taken to produce the BED file.
+- Code must be well commented and make use of docstrings.
+- Any Python code should follow PEP8 style format.
+- A README.md file should be present and provide guidance on using the tool.
+- Critical code should be covered by unit tests.
+- Tool should produce log files detailing the steps taken to produce the BED file.
 
 ### Usability
-	* Tool will have a commandline interface.
+- Tool will have a commandline interface.

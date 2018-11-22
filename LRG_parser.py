@@ -22,36 +22,38 @@ import xml.etree.ElementTree as ET
 
 # Import arguments from command line
 
-
-parser = argparse.ArgumentParser(
-    description='Downloads and parses Locus Reference Genomic (LRG) files and produces a BED file')
-file_location = parser.add_mutually_exclusive_group(required=True)
-file_location.add_argument('-l', '--local', type=int, action='store',
-                    help='Takes the LRG ID and parses a copy of the lrg'
-                         'file from the local directory. Assumes file is using'
-                         'the same naming convention as the LRG website.'
-                         'i.e. LRG_{user input}.xml')
-file_location.add_argument('-w', '--web', type=int, action='store',
+def get_args():
+    """
+    Function uses argparse to setup command line arguments and catch errors
+    """
+    parser = argparse.ArgumentParser(
+        description='Downloads and parses Locus Reference Genomic (LRG) files and produces a BED file'
+    )
+    file_location = parser.add_mutually_exclusive_group(required=True)
+    file_location.add_argument('-l', '--local', type=int, action='store',
+                               help='Takes the LRG ID and parses a copy of the lrg'
+                                    'file from the local directory. Assumes file is using'
+                                    'the same naming convention as the LRG website.'
+                                    'i.e. LRG_{user input}.xml')
+    file_location.add_argument('-w', '--web', type=int, action='store',
                                help='Takes the LRG ID and parses a copy of the LRG file '
                                'from the LRG website')
-parser.add_argument('-hgnc', '-h',
-                    nargs='+',
-                    help='Import LRG files for conversion into a BED file as per provided HGNC IDs',
-                    required=False)
-parser.add_argument('-xref', '-x',
-                    nargs='+',
-                    help='Import LRG files for conversion into a BED file as per provided external references',
-                    required=False)
-parser.add_argument('-output_dir', '-o',
-                    type=str,
-                    help='File path to output BED file. Defaults to current working directory',
-                    required=False)
-parser.add_argument('-bed_file', '-b',
-                    type=str,
-                    help='Specify the name of the BED file which the script will output. '
-                         'If not specified will automatically append .bed file suffix',
-                    required=False)
-args = parser.parse_args()
+    parser.add_argument('-hgnc', '-h',
+                        nargs='+',
+                        help='Import LRG files for conversion into a BED file as per provided HGNC IDs',
+                        required=False)
+    parser.add_argument('-xref', '-x',
+                        nargs='+',
+                        help='Import LRG files for conversion into a BED file as per provided external references',
+                        required=False)
+    parser.add_argument('-output_dir', '-o', type=str,
+                        help='File path to output BED file. Defaults to current working directory',
+                        required=False)
+    parser.add_argument('-bed_file', '-b', type=str,
+                        help='Specify the name of the BED file which the script will output. '
+                             'If not specified will automatically append .bed file suffix',
+                        required=False)
+    return parser.parse_args()
 
 
 def get_valid_lrg_id_list():
@@ -94,25 +96,6 @@ def check_lrg_id(lrg_id):
 def write_bed_file():
     """Writes a BED file"""
     pass
-
-
-def get_args():
-    """
-    Function uses argparse to setup command line arguments and catch errors
-    """
-    parser = argparse.ArgumentParser()
-    file_location = parser.add_mutually_exclusive_group(required=True)
-    file_location.add_argument('-l', '--local', type=int, action='store',
-                               help='Takes the LRG ID and parses a copy of the lrg'
-                                    'file from the local directory. Assumes file is using'
-                                    'the same naming convention as the LRG website.'
-                                    'i.e. LRG_{user input}.xml')
-    file_location.add_argument('-w', '--web', type=int, action='store',
-                               help='Takes the LRG ID and parses a copy of the LRG file '
-                               'from the LRG website')
-    # parser.add_argument('-f', '--file', action='store_true',
-    #                     help="Optional: writes the output to a file instead of to the console.")
-    return parser.parse_args()
 
 
 def get_lrg_file(sys_args):

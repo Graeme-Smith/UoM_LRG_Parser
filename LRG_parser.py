@@ -16,6 +16,7 @@ import sys
 import warnings
 import xml.etree.ElementTree as ET
 
+#TODO use only urllib or requests not both
 
 
 """ 
@@ -23,16 +24,14 @@ Import Arguments from command line
 """
 parser = argparse.ArgumentParser(
     description='Downloads and parses Locus Reference Genomic (LRG) files and produces a BED file')
-file_location = parser.add_mutually_exclusive_group(required=True)
-file_location.add_argument('-l', '--local', type=int, action='store',
+file_location = parser.add_mutually_exclusive_group(required=False)
+file_location.add_argument('-l', '--local', action='store_true',
                     help='Takes the LRG ID and parses a copy of the lrg'
-                         'file from the local directory. Assumes file is using'
-                         'the same naming convention as the LRG website.'
-                         'i.e. LRG_{user input}.xml')
-file_location.add_argument('-w', '--web', type=int, action='store',
-                               help='Takes the LRG ID and parses a copy of the LRG file '
-                               'from the LRG website')
-parser.add_argument('-hgnc', '-h',
+                         'file from the local directory instead of from '
+                         'the LRG FTP site. Assumes file is using the '
+                         'same naming convention as the LRG website.'
+                         'i.e. LRG_{user input}.xml. Default is to use web' )
+parser.add_argument('-hgnc', '-g',
                     nargs='+',
                     help='Import LRG files for conversion into a BED file as per provided HGNC IDs',
                     required=False)
@@ -69,60 +68,34 @@ def get_lrg_id(ref, type):
         lrg_id = entry.attrib["id"]
     return lrg_id
 
-def fetch_lrg_file(ref, type):
-    pass
 
-
-
-def lrg2bed():
-    """Parses LRG format files and converts to BED file format"""
-    pass
-
-
-
-def import_lrg_files():
-    """Imports multiple requested LRG files"""
-    pass
-
-
-def check_lrg_id(lrg_id):
-    """Checks that an lrg_id is valid"""
-    pass
-
-
-
-def write_bed_file():
-    """Writes a BED file"""
-    pass
-
-
-def get_lrg_file(sys_args):
+def get_lrg_file(lrg_id, local=False):
     """
     This pulls the LRG/XML file either locally or from the LRG FTP site and
     parses using ElementTree. sys_args.local means local file and sys_args.web
     means retrieve file from the LRG website.
     """
-    if sys_args.local:  # If the user specified a local file
+    if local == 1:  # If the user specified a local file
         try:
-            lrg_xml = open('LRG_' + str(sys_args.local) + '.xml', 'r')  # Use the local file
-            print('LRG_' + str(sys_args.local) + '.xml successfully found and loaded')
+            lrg_xml = open(lrg_id + '.xml', 'r')  # Use the local file
+            print(lrg_id + '.xml successfully found and loaded')
             tree = ET.parse(lrg_xml)
         except IOError:
-            print("Could not find LRG_" + str(sys_args.local) + ".xml locally, it was downloaded instead.")
-            url = 'ftp://ftp.ebi.ac.uk/pub/databases/lrgex/LRG_' + str(sys_args.local) + '.xml'
+            print("Could not find " + lrg_id + ".xml locally, it was downloaded instead.")
+            url = 'ftp://ftp.ebi.ac.uk/pub/databases/lrgex/' + lrg_id + '.xml'
             try:  # Check it worked or throw up an error message
                 lrg_xml = urlopen(url)
                 tree = ET.parse(lrg_xml)
-                tree.write(open('LRG_' + str(sys_args.local) + '.xml', 'wb'))  # Write to file
+                tree.write(open(lrg_id + '.xml', 'wb'))  # Write to file
             except Exception as err:
                 print("The file could not be retrieved from the web url - check file name and internet connection?")
                 sys.exit(err)  # Exit with an error
-    elif sys_args.web:  # Otherwise they want on from the web, so fetch this
-        url = 'ftp://ftp.ebi.ac.uk/pub/databases/lrgex/LRG_' + str(sys_args.web) + '.xml'
+    elif local == 0:  # Otherwise they want on from the web, so fetch this
+        url = 'ftp://ftp.ebi.ac.uk/pub/databases/lrgex/' + lrg_id + '.xml'
         try:  # Check it worked or throw up an error message
             lrg_xml = urlopen(url)
             tree = ET.parse(lrg_xml)
-            tree.write(open('LRG_' + str(sys_args.web) + '.xml', 'wb'))  # Write to file
+            tree.write(open(lrg_id + '.xml', 'wb'))  # Write to file
         except Exception as err:
             print("The file could not be retrieved from the web url - check file name and internet connection")
             sys.exit(err)  # Exit with an error
@@ -263,15 +236,44 @@ def output_results(tree):
 
     f.close()
 
+def fetch_lrg_file(ref, type):
+    pass
+
+
+
+def lrg2bed():
+    """Parses LRG format files and converts to BED file format"""
+    pass
+
+
+
+def import_lrg_files():
+    """Imports multiple requested LRG files"""
+    pass
+
+
+def check_lrg_id(lrg_id):
+    """Checks that an lrg_id is valid"""
+    pass
+
+
+
+def write_bed_file():
+    """Writes a BED file"""
+    pass
 
 def main():
     """
     Main function for script - not yet finished.
     """
-    sys_args = get_args()
-    tree = get_lrg_file(sys_args)
-    check_version(tree)
-    output_results(tree)
+    args = parser.parse_args()
+    print(args)  # For debugging
+    print(get_lrg_file("LRG_1", 0))
+    print(get_lrg_file(get_lrg_id("COL1A1", "hgnc"),0))
+    # tree = get_lrg_file(sys_args)
+    # check_version(tree)
+    # output_results(tree)
+
 
 
 main()  # Call the main function

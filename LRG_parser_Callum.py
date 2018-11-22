@@ -3,7 +3,7 @@
 # Date: 21 November 2018
 # Version 0.1
 #
-# This file: LRG_parser.py:
+# This file: LRG_parser_Callum.py:
 # Script downloads a XML from the LRG website, parses it with ElementTree and prints out gene information
 # such as LRG start and end base positions of each exon which is then be used to create the BED file (currently
 # just a .txt file).
@@ -25,9 +25,9 @@ def get_args():
     file_location = parser.add_mutually_exclusive_group(required=True)
     file_location.add_argument('-l', '--local', type=int, action='store',
                                help='Takes the LRG ID and parses a copy of the lrg'
-                                      'file from the local directory. Assumes file is using '
-                                      'the same naming convention as the LRG website. '
-                                      'i.e. LRG_{user input}.xml')
+                                    'file from the local directory. Assumes file is using'
+                                    'the same naming convention as the LRG website.'
+                                    'i.e. LRG_{user input}.xml')
     file_location.add_argument('-w', '--web', type=int, action='store',
                                help='Takes the LRG ID and parses a copy of the LRG file '
                                'from the LRG website')
@@ -48,7 +48,15 @@ def get_lrg_file(sys_args):
             print('LRG_' + str(sys_args.local) + '.xml successfully found and loaded')
             tree = ElTr.parse(lrg_xml)
         except IOError:
-            print("Cannot find LRG_" + str(sys_args.local) + ".xml, use --web to download")
+            print("Could not find LRG_" + str(sys_args.local) + ".xml locally, it was downloaded instead.")
+            url = 'ftp://ftp.ebi.ac.uk/pub/databases/lrgex/LRG_' + str(sys_args.local) + '.xml'
+            try:  # Check it worked or throw up an error message
+                lrg_xml = urlopen(url)
+                tree = ElTr.parse(lrg_xml)
+                tree.write(open('LRG_' + str(sys_args.local) + '.xml', 'wb'))  # Write to file
+            except Exception as err:
+                print("The file could not be retrieved from the web url - check file name and internet connection?")
+                sys.exit(err)  # Exit with an error
     elif sys_args.web:  # Otherwise they want on from the web, so fetch this
         url = 'ftp://ftp.ebi.ac.uk/pub/databases/lrgex/LRG_' + str(sys_args.web) + '.xml'
         try:  # Check it worked or throw up an error message
@@ -205,6 +213,7 @@ def main():
     check_version(tree)
     output_results(tree)
 
+
 main()  # Call the main function
 
 
@@ -213,4 +222,3 @@ main()  # Call the main function
 
 
 #####################################################
-

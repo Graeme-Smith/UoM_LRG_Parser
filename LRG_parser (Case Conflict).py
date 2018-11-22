@@ -84,3 +84,8 @@ def check_lrg_id(lrg_id):
 def write_bed_file():
     """Writes a BED file"""
     pass
+
+
+
+
+

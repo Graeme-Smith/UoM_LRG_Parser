@@ -1,22 +1,19 @@
 """
-
 Bioinformatics BIOL68400 Programming Assignment: Parser for LRG (XML) files
 Authors: Callum Rakhit and Graeme Smith
 Created: 21st November 2018
 Description: Parses LRG XML files and outputs a BED file
-Usage: See README and documentation.docx for detailed documentation.
-
+Usage: See README and documentation.docx for detailed documentation. Made for Python 3.6.6
 """
-# Python 3.5/3.6.6
 
 from urllib.request import urlopen  # Python 3 specific
 import argparse
 import os
 import requests
 import sys
-import xml.etree.ElementTree as ET
+import xml.etree.ElementTree as ElTr
 
-#TODO use only urllib or requests not both
+# TODO use only urllib or requests not both
 
 # Import arguments from command line
 
@@ -25,7 +22,7 @@ def get_args():
     """
     Function uses argparse to setup command line arguments and catch errors
     """
-    parser = argparse.ArgumentParser(description='Downloads and parses Locus Reference Genomic (LRG) files and produces a BED file')
+    parser = argparse.ArgumentParser(description='Downloads and parses Locus Reference Genomic (LRG) files and producesa BED file')
     file_location = parser.add_mutually_exclusive_group(required=True)
     file_location.add_argument('-l', '--local', type=int, action='store', help='Takes the LRG ID and parses a copy of the lrg  file from the local directory. Assumes file is using the same naming convention as the LRG website. i.e. LRG_{user input}.xml')
     file_location.add_argument('-w', '--web', type=int, action='store', help='Takes the LRG ID and parses a copy of the LRG file from the LRG website')
@@ -40,6 +37,7 @@ def get_valid_lrg_id_list():
     """Uses the EMBL-EBI EB-eye RESTful service to retrieve list of valid files"""
     pass
 
+
 def fetch_lrg_file(ref, lrg_type):
     print(ref)
     print(lrg_type)
@@ -52,13 +50,13 @@ def get_lrg_id(ref, lrg_id_type):
     if type == "hgnc":
         url = 'https://www.ebi.ac.uk/ebisearch/ws/rest/lrg?query=name:' + ref
         response = requests.get(url, allow_redirects=True)
-        root = ET.fromstring(response.content)
+        root = ElTr.fromstring(response.content)
         for entry in root.iter('entry'):
             lrg_id_type = entry.attrib["id"]
     elif type == "xref":
         url = 'https://www.ebi.ac.uk/ebisearch/ws/rest/lrg?query=' + ref
         response = requests.get(url, allow_redirects=True)
-        root = ET.fromstring(response.content)
+        root = ElTr.fromstring(response.content)
         for entry in root.iter('entry'):
             lrg_id_type = entry.attrib["id"]
     # Parse the returned xml file for the LRG file name
@@ -75,22 +73,23 @@ def get_lrg_file(lrg_id, local=False):
         try:
             lrg_xml = open(lrg_id + '.xml', 'r')  # Use the local file
             print(lrg_id + '.xml successfully found and loaded')
-            tree = ET.parse(lrg_xml)
+            tree = ElTr.parse(lrg_xml)
         except IOError:
             print("Could not find " + lrg_id + ".xml locally, it was downloaded instead.")
             url = 'ftp://ftp.ebi.ac.uk/pub/databases/lrgex/' + lrg_id + '.xml'
             try:  # Check it worked or throw up an error message
                 lrg_xml = urlopen(url)
-                tree = ET.parse(lrg_xml)
+                tree = ElTr.parse(lrg_xml)
                 tree.write(open(lrg_id + '.xml', 'wb'))  # Write to file
             except Exception as err:
                 print("The file could not be retrieved from the web url - check file name and internet connection?")
                 sys.exit(err)  # Exit with an error
+        return tree
     elif local == 0:  # Otherwise they want on from the web, so fetch this
         url = 'ftp://ftp.ebi.ac.uk/pub/databases/lrgex/' + lrg_id + '.xml'
         try:  # Check it worked or throw up an error message
             lrg_xml = urlopen(url)
-            tree = ET.parse(lrg_xml)
+            tree = ElTr.parse(lrg_xml)
             tree.write(open(lrg_id + '.xml', 'wb'))  # Write to file
         except Exception as err:
             print("The file could not be retrieved from the web url - check file name and internet connection")
@@ -98,7 +97,7 @@ def get_lrg_file(lrg_id, local=False):
         return tree
 
 
-### Check the LRG version is correct #####
+##### Check the LRG version is correct #####
 
 
 def check_version(tree):
@@ -229,6 +228,7 @@ def output_results(tree):
 
     f.close()
 
+
 def lrg2bed():
     """Parses LRG format files and converts to BED file format"""
     pass
@@ -252,7 +252,8 @@ def write_bed_file():
     Writes a BED file
     """
     pass   
-    
+
+
 def fetch_lrg_file(ref, type):
     pass
 
@@ -308,17 +309,22 @@ def main():
     output_results(tree)
     output_bed(tree)
 
-    args = parser.parse_args()
-    print(args)  # For debugging
+    # args = get_args()
+    # print(args)  # For debugging
     # Parse commandline args
     # Check if LRG_files have been specified by user:
+
     if args.local == True:
         print("hello local")
+
     # Check if hgnc symbols have been specified by user:
+
     elif args.hgnc != None:
         for hgnc_ref in args.hgnc:
             print(get_lrg_file(get_lrg_id(hgnc_ref, "hgnc"), local=False))
+
     # Check if external refs have been specified by user:
+
     elif args.xref != None:
        for xref_ref in args.xref:
            print(get_lrg_file(get_lrg_id(xref_ref, "xref"), local=False))

@@ -6,6 +6,7 @@ Usage:             See README for detailed documentation.
 """
 
 # Python 3.5
+from urllib.request import urlopen  # Python 3 specific
 import argparse
 import glob
 import os
@@ -14,6 +15,7 @@ import requests
 import sys
 import warnings
 import xml.etree.ElementTree as ET
+
 
 
 """ 
@@ -124,13 +126,13 @@ def get_lrg_file(sys_args):
         try:
             lrg_xml = open('LRG_' + str(sys_args.local) + '.xml', 'r')  # Use the local file
             print('LRG_' + str(sys_args.local) + '.xml successfully found and loaded')
-            tree = ElTr.parse(lrg_xml)
+            tree = ET.parse(lrg_xml)
         except IOError:
             print("Could not find LRG_" + str(sys_args.local) + ".xml locally, it was downloaded instead.")
             url = 'ftp://ftp.ebi.ac.uk/pub/databases/lrgex/LRG_' + str(sys_args.local) + '.xml'
             try:  # Check it worked or throw up an error message
                 lrg_xml = urlopen(url)
-                tree = ElTr.parse(lrg_xml)
+                tree = ET.parse(lrg_xml)
                 tree.write(open('LRG_' + str(sys_args.local) + '.xml', 'wb'))  # Write to file
             except Exception as err:
                 print("The file could not be retrieved from the web url - check file name and internet connection?")
@@ -139,7 +141,7 @@ def get_lrg_file(sys_args):
         url = 'ftp://ftp.ebi.ac.uk/pub/databases/lrgex/LRG_' + str(sys_args.web) + '.xml'
         try:  # Check it worked or throw up an error message
             lrg_xml = urlopen(url)
-            tree = ElTr.parse(lrg_xml)
+            tree = ET.parse(lrg_xml)
             tree.write(open('LRG_' + str(sys_args.web) + '.xml', 'wb'))  # Write to file
         except Exception as err:
             print("The file could not be retrieved from the web url - check file name and internet connection")

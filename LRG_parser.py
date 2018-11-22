@@ -20,10 +20,8 @@ import sys
 # import warnings
 import xml.etree.ElementTree as ET
 
+# Import arguments from command line
 
-""" 
-Import Arguments from command line
-"""
 
 parser = argparse.ArgumentParser(
     description='Downloads and parses Locus Reference Genomic (LRG) files and produces a BED file')

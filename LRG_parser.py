@@ -19,7 +19,7 @@ import sys
 # import warnings
 import xml.etree.ElementTree as ET
 
-#TODO use only urllib or requests not both
+# TODO use only urllib or requests not both
 
 """ 
 Import Arguments from command line
@@ -28,11 +28,11 @@ parser = argparse.ArgumentParser(
     description='Downloads and parses Locus Reference Genomic (LRG) files and produces a BED file')
 file_location = parser.add_mutually_exclusive_group(required=False)
 file_location.add_argument('-l', '--local', action='store_true',
-                    help='Takes the LRG ID and parses a copy of the lrg'
-                         'file from the local directory instead of from '
-                         'the LRG FTP site. Assumes file is using the '
-                         'same naming convention as the LRG website.'
-                         'i.e. LRG_{user input}.xml. Default is to use web' )
+                           help='Takes the LRG ID and parses a copy of the lrg'
+                                'file from the local directory instead of from '
+                                'the LRG FTP site. Assumes file is using the '
+                                'same naming convention as the LRG website.'
+                                'i.e. LRG_{user input}.xml. Default is to use web')
 parser.add_argument('-hgnc', '-g',
                     nargs='+',
                     help='Import LRG files for conversion into a BED file as per provided HGNC IDs',
@@ -49,13 +49,14 @@ parser.add_argument('-bed_file', '-b',
                     type=str,
                     help='Specify the name of the BED file which the script will output. '
                          'If not specified will automatically append .bed file suffix',
-                     required=False)
+                    required=False)
 args = parser.parse_args()
 
 
 def get_valid_lrg_id_list():
     """Uses the EMBL-EBI EB-eye RESTful service to retrieve list of valid files"""
     pass
+
 
 def fetch_lrg_file(ref, lrg_type):
     print(ref)
@@ -64,23 +65,22 @@ def fetch_lrg_file(ref, lrg_type):
 
 
 def get_lrg_id(ref, lrg_id_type):
-
     """Uses the EMBL-EBI RESTful API to translate hgnc symbols or external refs into LRG file name"""
-    if type == "hgnc":
+    if lrg_id_type == "hgnc":
         url = 'https://www.ebi.ac.uk/ebisearch/ws/rest/lrg?query=name:' + ref
         response = requests.get(url, allow_redirects=True)
         root = ET.fromstring(response.content)
         for entry in root.iter('entry'):
-            lrg_id_type = entry.attrib["id"]
-    elif type == "xref":
+            lrg_id = entry.attrib["id"]
+    elif lrg_id_type == "xref":
         url = 'https://www.ebi.ac.uk/ebisearch/ws/rest/lrg?query=' + ref
         response = requests.get(url, allow_redirects=True)
         root = ET.fromstring(response.content)
         for entry in root.iter('entry'):
-            lrg_id_type = entry.attrib["id"]
+            lrg_id = entry.attrib["id"]
     # Parse the returned xml file for the LRG file name
-    return lrg_id_type
-  
+    return lrg_id
+
 
 def get_lrg_file(lrg_id, local=False):
     """
@@ -246,6 +246,7 @@ def output_results(tree):
 
     f.close()
 
+
 def lrg2bed():
     """Parses LRG format files and converts to BED file format"""
     pass
@@ -268,10 +269,12 @@ def write_bed_file():
     """
     Writes a BED file
     """
-    pass   
-    
+    pass
+
+
 def fetch_lrg_file(ref, type):
     pass
+
 
 ##### Functions to populate the .BED output #####
 
@@ -281,9 +284,10 @@ def fetch_lrg_file(ref, type):
 
 def get_chromosome(tree):
     chromosome = list()
-    chromosome.append(('chr', tree.find('updatable_annotation/annotation_set/mapping/other_name').text))
-    chromosome.append(('chromStart', tree.find('updatable_annotation/annotation_set/mapping/other_start').text))
-    chromosome.append(('chromEnd', tree.find('updatable_annotationv/annotation_set//mapping/other_end').text))
+    element = tree.find("updatable_annotation/annotation_set[@type='lrg']/mapping")
+    chromosome.append(('chr', element.get("other_name")))
+    # chromosome.append(('chromStart', tree.find('updatable_annotation/annotation_set/mapping/other_start').text))
+    # chromosome.append(('chromEnd', tree.find('updatable_annotationv/annotation_set//mapping/other_end').text))
     return chromosome
 
 
@@ -326,12 +330,18 @@ def main():
     # Check if hgnc symbols have been specified by user:
     elif args.hgnc != None:
         for hgnc_ref in args.hgnc:
-            print(get_lrg_file(get_lrg_id(hgnc_ref, "hgnc"), local=False))
+            print(get_lrg_id(hgnc_ref, "hgnc"))
+            tree = (get_lrg_file(get_lrg_id(hgnc_ref, "hgnc"), local=False))
     # Check if external refs have been specified by user:
     elif args.xref != None:
-       for xref_ref in args.xref:
-           print(get_lrg_file(get_lrg_id(xref_ref, "xref"), local=False))
-            
+        for xref_ref in args.xref:
+            print(get_lrg_id(xref_ref, "xref"))
+            tree = get_lrg_file(get_lrg_id(xref_ref, "xref"), local=False)
+    print(tree)
+
+    check_version(tree)
+    output_results(tree)
+    output_bed(tree)
 
 if __name__ == '__main__':  # if this .py script is executing as the main function, the run main()
     main()

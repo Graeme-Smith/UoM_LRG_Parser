@@ -39,7 +39,7 @@ def get_args():
     file_location.add_argument('-w', '--web', type=int, action='store',
                                help='Takes the LRG ID and parses a copy of the LRG file '
                                'from the LRG website')
-    parser.add_argument('-hgnc', '-h',
+    parser.add_argument('-hgnc',
                         nargs='+',
                         help='Import LRG files for conversion into a BED file as per provided HGNC IDs',
                         required=False)
@@ -143,11 +143,6 @@ def get_lrg_file(sys_args):
             print("The file could not be retrieved from the web url - check file name and internet connection")
             sys.exit(err)  # Exit with an error
         return tree
-
-
-# cmd_line_input = get_args()
-#
-# get_lrg_file(cmd_line_input)
 
 
 def check_version(tree):
@@ -290,8 +285,5 @@ def main():
     output_results(tree)
 
 
-main()  # Call the main function
-
-
-# if __name__ == '__main__':  # Will sort this out in the final thing
-#     main()
+if __name__ == '__main__':  # if this .py script is executing as the main function, the run main()
+    main()

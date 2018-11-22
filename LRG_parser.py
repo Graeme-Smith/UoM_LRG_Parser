@@ -17,7 +17,7 @@ import os
 import requests
 import sys
 # import warnings
-import xml.etree.ElementTree as ElTr
+import xml.etree.ElementTree as ET
 
 #TODO use only urllib or requests not both
 
@@ -69,13 +69,13 @@ def get_lrg_id(ref, lrg_id_type):
     if type == "hgnc":
         url = 'https://www.ebi.ac.uk/ebisearch/ws/rest/lrg?query=name:' + ref
         response = requests.get(url, allow_redirects=True)
-        root = ElTr.fromstring(response.content)
+        root = ET.fromstring(response.content)
         for entry in root.iter('entry'):
             lrg_id_type = entry.attrib["id"]
     elif type == "xref":
         url = 'https://www.ebi.ac.uk/ebisearch/ws/rest/lrg?query=' + ref
         response = requests.get(url, allow_redirects=True)
-        root = ElTr.fromstring(response.content)
+        root = ET.fromstring(response.content)
         for entry in root.iter('entry'):
             lrg_id_type = entry.attrib["id"]
     # Parse the returned xml file for the LRG file name

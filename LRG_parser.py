@@ -11,15 +11,13 @@ Usage: See README and documentation.docx for detailed documentation.
 
 from urllib.request import urlopen  # Python 3 specific
 import argparse
-# import glob
 import os
-# import pandas as pd
 import requests
 import sys
-# import warnings
 import xml.etree.ElementTree as ET
 
 # TODO use only urllib or requests not both
+
 
 """ 
 Import Arguments from command line
@@ -51,6 +49,24 @@ parser.add_argument('-bed_file', '-b',
                          'If not specified will automatically append .bed file suffix',
                     required=False)
 args = parser.parse_args()
+
+# Import arguments from command line
+
+
+# def get_args():
+#     """
+#     Function uses argparse to setup command line arguments and catch errors
+#     """
+#     parser = argparse.ArgumentParser(description='Downloads and parses Locus Reference Genomic (LRG) files and produces a BED file')
+#     file_location = parser.add_mutually_exclusive_group(required=True)
+#     file_location.add_argument('-l', '--local', type=int, action='store', help='Takes the LRG ID and parses a copy of the lrg  file from the local directory. Assumes file is using the same naming convention as the LRG website. i.e. LRG_{user input}.xml')
+#     file_location.add_argument('-w', '--web', type=int, action='store', help='Takes the LRG ID and parses a copy of the LRG file from the LRG website')
+#     parser.add_argument('-hgnc', '-g', nargs='+', help='Import LRG files for conversion into a BED file as per provided HGNC IDs', required=False)
+#     parser.add_argument('-xref', '-x', nargs='+', help='Import LRG files for conversion into a BED file as per provided external references', required=False)
+#     parser.add_argument('-output_dir', '-o', type=str, help='File path to output BED file. Defaults to current working directory', required=False)
+#     parser.add_argument('-bed_file', '-b', type=str, help='Specify the name of the BED file which the script will output. If not specified will automatically append .bed file suffix', required=False)
+#     return parser.parse_args()
+
 
 
 def get_valid_lrg_id_list():
@@ -283,11 +299,24 @@ def fetch_lrg_file(ref, type):
 
 
 def get_chromosome(tree):
+
+    chrom_dict = {}
+
+    root = tree.getroot()
+
+    for mapping in root.iter('mapping'):
+        mapping_attributes = mapping.attrib
+        chrom_dict[mapping_attributes.get("coord_system", "none")] = mapping_attributes
+
     chromosome = list()
+
     element = tree.find("updatable_annotation/annotation_set[@type='lrg']/mapping")
     chromosome.append(('chr', element.get("other_name")))
     # chromosome.append(('chromStart', tree.find('updatable_annotation/annotation_set/mapping/other_start').text))
     # chromosome.append(('chromEnd', tree.find('updatable_annotationv/annotation_set//mapping/other_end').text))
+    chromosome.append(('chr' + chrom_dict['GRCh38.p12']['other_name']))
+    chromosome.append((chrom_dict['GRCh38.p12']['other_start']))
+    chromosome.append((chrom_dict['GRCh38.p12']['other_end']))
     return chromosome
 
 
@@ -295,31 +324,29 @@ def output_bed(tree):
     """
     Output all results to a BED file: runs the 'get' functions and iterates over returned data and prints to file
     """
+    results = get_summary_list(tree)
+    filename = results[1][1] + ".txt"
     chromosome = get_chromosome(tree)
-    filename = chromosome[1][1] + ".BED"
+    filename = chromosome[0] + ".BED"
     os.makedirs('output/', exist_ok=True)  # Make the output directory if it doesn't exist
 
     with open('output/' + filename, 'w') as f:
-        f.write()
 
         # Output from the get_chromosome function
 
         for item in chromosome:
-            f.write(item[0] + ": " + item[1] + '\n')
+            f.write(item + '\t')
 
     f.close()
 
 
 def main():
-    """
-    Main function for script - not yet finished.
-    """
 
-    # sys_args = get_args()
-    # tree = get_lrg_file(sys_args)
-    # check_version(tree)
-    # output_results(tree)
-    # output_bed(tree)
+    sys_args = args
+    tree = get_lrg_file(sys_args)
+    check_version(tree)
+    output_results(tree)
+    output_bed(tree)
 
     args = parser.parse_args()
     print(args)  # For debugging

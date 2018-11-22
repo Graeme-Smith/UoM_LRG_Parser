@@ -72,8 +72,8 @@ def get_lrg_id(ref, type):
 def get_lrg_file(lrg_id, local=False):
     """
     This pulls the LRG/XML file either locally or from the LRG FTP site and
-    parses using ElementTree. sys_args.local means local file and sys_args.web
-    means retrieve file from the LRG website.
+    parses using ElementTree. local flag means local file, if false then
+    retrieve file from the LRG website.
     """
     if local == 1:  # If the user specified a local file
         try:
@@ -257,10 +257,10 @@ def check_lrg_id(lrg_id):
     pass
 
 
-
 def write_bed_file():
     """Writes a BED file"""
     pass
+
 
 def main():
     """
@@ -268,8 +268,19 @@ def main():
     """
     args = parser.parse_args()
     print(args)  # For debugging
-    print(get_lrg_file("LRG_1", 0))
-    print(get_lrg_file(get_lrg_id("COL1A1", "hgnc"),0))
+    # Parse commandline args
+    # Check if LRG_files have been specified by user:
+    if args.local == True:
+        print("hello local")
+    # Check if hgnc symbols have been specified by user:
+    elif args.hgnc != None:
+        for hgnc_ref in args.hgnc:
+            print(get_lrg_file(get_lrg_id(hgnc_ref, "hgnc"), local=False))
+    # Check if external refs have been specified by user:
+    elif args.xref != None:
+       for xref_ref in args.xref:
+           print(get_lrg_file(get_lrg_id(xref_ref, "xref"), local=False))
+
     # tree = get_lrg_file(sys_args)
     # check_version(tree)
     # output_results(tree)

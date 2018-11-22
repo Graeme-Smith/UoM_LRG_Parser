@@ -285,9 +285,38 @@ def output_results(tree):
 # annotation set = LRG, mapping
 
 
+# def get_summary_list(tree):
+#     """
+#     Creates a list and appends it with basic info from the fixed_annotation part of the LRG file.
+#     Currently picks the lrg_locus, the id (LRG version), the hgnc_id and the sequence source.
+#     """
+#     results = list()
+#     results.append(('Gene', tree.find('updatable_annotation/annotation_set/lrg_locus').text))
+#     results.append(('LRG version', tree.find('fixed_annotation/id').text))
+#     results.append(('HGNC ID', tree.find('fixed_annotation/hgnc_id').text))
+#     results.append(('Sequence source', tree.find('fixed_annotation/sequence_source').text))
+#     return results
+
+
 def get_chromosome(tree):
+    root = tree.getroot()
+    for mapping in root.iter('mapping'):
+        print(mapping)
+
+    for country in root.findall('country'):
+        rank = country.find('rank').text
+    name = country.get('name')
+    print
+    name, rank
+
+    for mapping in root.findall('annotation_set'):
+        rank = country.find('rank').text
+    name = country.get('name')
+    print
+    name, rank
+
     chromosome = list()
-    chromosome.append(('chr', tree.find('updatable_annotation/annotation_set/mapping/other_name').text))
+    chromosome.append(('chr', tree.find('updatable_annotation/annotation_set/mapping/other_name').string))
     chromosome.append(('chromStart', tree.find('updatable_annotation/annotation_set/mapping/other_start').text))
     chromosome.append(('chromEnd', tree.find('updatable_annotationv/annotation_set//mapping/other_end').text))
     return chromosome

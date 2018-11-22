@@ -1,10 +1,18 @@
-"""Contains tests for lrg_parser and associate scripts"""
+"""
 
-import unittest2 as unittest
-from helpers import *
+Bioinformatics BIOL68400 Programming Assignment: Tests for LRG (XML) file parser
+Authors: Callum Rakhit and Graeme Smith
+Created: 21st November 2018
+Description: Contains tests for lrg_parser and associate scripts
+Usage: See README for detailed documentation.
+
+"""
+
+# import unittest2 as unittest
+# from helpers import *
 from UoM_LRG_Parser.LRG_parser import get_summary_list
 
-#TODO write relevant tests
+# TODO write relevant tests
 
 if __name__ == '__main__':
     unittest.main()

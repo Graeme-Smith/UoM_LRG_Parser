@@ -1,8 +1,11 @@
 """
-Authors:           Callum Rakhit and Graeme Smith
-Created:           November 2018
-Description:       Parses LRG XML files and outputs a BED file
-Usage:             See README for detailed documentation.
+
+Bioinformatics BIOL68400 Programming Assignment: Parser for LRG (XML) files
+Authors: Callum Rakhit and Graeme Smith
+Created: 21st November 2018
+Description: Parses LRG XML files and outputs a BED file
+Usage: See README and documentation.docx for detailed documentation.
+
 """
 
 # Python 3.5/3.6.6

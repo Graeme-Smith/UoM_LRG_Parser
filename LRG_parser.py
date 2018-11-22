@@ -5,20 +5,23 @@ Description:       Parses LRG XML files and outputs a BED file
 Usage:             See README for detailed documentation.
 """
 
-# Python 3.5
+# Python 3.5/3.6.6
+
+from urllib.request import urlopen  # Python 3 specific
 import argparse
-import glob
+# import glob
 import os
-import pandas as pd
+# import pandas as pd
 import requests
 import sys
-import warnings
+# import warnings
 import xml.etree.ElementTree as ET
 
 
 """ 
 Import Arguments from command line
 """
+
 parser = argparse.ArgumentParser(
     description='Downloads and parses Locus Reference Genomic (LRG) files and produces a BED file')
 file_location = parser.add_mutually_exclusive_group(required=True)
@@ -46,7 +49,7 @@ parser.add_argument('-bed_file', '-b',
                     type=str,
                     help='Specify the name of the BED file which the script will output. '
                          'If not specified will automatically append .bed file suffix',
-                     required=False)
+                    required=False)
 args = parser.parse_args()
 
 
@@ -77,8 +80,6 @@ def lrg2bed():
     pass
 
 
-
-
 def import_lrg_files():
     """Imports multiple requested LRG files"""
     pass
@@ -87,7 +88,6 @@ def import_lrg_files():
 def check_lrg_id(lrg_id):
     """Checks that an lrg_id is valid"""
     pass
-
 
 
 def write_bed_file():
@@ -124,13 +124,13 @@ def get_lrg_file(sys_args):
         try:
             lrg_xml = open('LRG_' + str(sys_args.local) + '.xml', 'r')  # Use the local file
             print('LRG_' + str(sys_args.local) + '.xml successfully found and loaded')
-            tree = ElTr.parse(lrg_xml)
+            tree = ET.parse(lrg_xml)
         except IOError:
             print("Could not find LRG_" + str(sys_args.local) + ".xml locally, it was downloaded instead.")
             url = 'ftp://ftp.ebi.ac.uk/pub/databases/lrgex/LRG_' + str(sys_args.local) + '.xml'
             try:  # Check it worked or throw up an error message
                 lrg_xml = urlopen(url)
-                tree = ElTr.parse(lrg_xml)
+                tree = ET.parse(lrg_xml)
                 tree.write(open('LRG_' + str(sys_args.local) + '.xml', 'wb'))  # Write to file
             except Exception as err:
                 print("The file could not be retrieved from the web url - check file name and internet connection?")
@@ -139,7 +139,7 @@ def get_lrg_file(sys_args):
         url = 'ftp://ftp.ebi.ac.uk/pub/databases/lrgex/LRG_' + str(sys_args.web) + '.xml'
         try:  # Check it worked or throw up an error message
             lrg_xml = urlopen(url)
-            tree = ElTr.parse(lrg_xml)
+            tree = ET.parse(lrg_xml)
             tree.write(open('LRG_' + str(sys_args.web) + '.xml', 'wb'))  # Write to file
         except Exception as err:
             print("The file could not be retrieved from the web url - check file name and internet connection")
@@ -297,6 +297,3 @@ main()  # Call the main function
 
 # if __name__ == '__main__':  # Will sort this out in the final thing
 #     main()
-
-
-

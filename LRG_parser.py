@@ -39,7 +39,7 @@ def get_args():
     file_location.add_argument('-w', '--web', type=int, action='store',
                                help='Takes the LRG ID and parses a copy of the LRG file '
                                'from the LRG website')
-    parser.add_argument('-hgnc',
+    parser.add_argument('-hgnc', '-g',
                         nargs='+',
                         help='Import LRG files for conversion into a BED file as per provided HGNC IDs',
                         required=False)
@@ -111,6 +111,8 @@ def write_bed_file():
     pass
 
 
+##### Load in the file #####
+
 def get_lrg_file(sys_args):
     """
     This pulls the LRG/XML file either locally or from the LRG FTP site and
@@ -145,11 +147,17 @@ def get_lrg_file(sys_args):
         return tree
 
 
+### Check the LRG version is correct #####
+
+
 def check_version(tree):
     """ Tests that imported XML is an LRG file and has the expected version number """
     root = tree.getroot()
     assert root.tag == 'lrg', 'XML not LRG'
     assert root.get('schema_version') == '1.9', 'Wrong LRG version, should to be 1.9'
+
+
+##### Functions to populate the .txt output #####
 
 
 def get_summary_list(tree):
@@ -226,12 +234,8 @@ def output_results(tree):
     Output all results to text file: runs the 'get' functions and iterates over returned data and prints
     """
     results = get_summary_list(tree)
-
     filename = results[1][1] + ".txt"
-
-    # os.makedirs(os.path.dirname(filename), exist_ok=True)
-
-    os.makedirs('output/', exist_ok=True)
+    os.makedirs('output/', exist_ok=True)  # Make the output directory if it doesn't exist
 
     with open('output/' + filename, 'w') as f:
         f.write("File Summary:\n---------------\n")
@@ -275,6 +279,39 @@ def output_results(tree):
     f.close()
 
 
+##### Functions to populate the .BED output #####
+
+
+# annotation set = LRG, mapping
+
+
+def get_chromosome(tree):
+    chromosome = list()
+    chromosome.append(('chr', tree.find('updatable_annotation/annotation_set/mapping/other_name').text))
+    chromosome.append(('chromStart', tree.find('updatable_annotation/annotation_set/mapping/other_start').text))
+    chromosome.append(('chromEnd', tree.find('updatable_annotationv/annotation_set//mapping/other_end').text))
+    return chromosome
+
+
+def output_bed(tree):
+    """
+    Output all results to a BED file: runs the 'get' functions and iterates over returned data and prints to file
+    """
+    chromosome = get_chromosome(tree)
+    filename = chromosome[1][1] + ".BED"
+    os.makedirs('output/', exist_ok=True)  # Make the output directory if it doesn't exist
+
+    with open('output/' + filename, 'w') as f:
+        f.write()
+
+        # Output from the get_chromosome function
+
+        for item in chromosome:
+            f.write(item[0] + ": " + item[1] + '\n')
+
+    f.close()
+
+
 def main():
     """
     Main function for script - not yet finished.
@@ -283,6 +320,7 @@ def main():
     tree = get_lrg_file(sys_args)
     check_version(tree)
     output_results(tree)
+    output_bed(tree)
 
 
 if __name__ == '__main__':  # if this .py script is executing as the main function, the run main()

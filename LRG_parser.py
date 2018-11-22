@@ -18,9 +18,10 @@ import os
 import requests
 import sys
 # import warnings
-import xml.etree.ElementTree as ET
+import xml.etree.ElementTree as ElTr
 
 # Import arguments from command line
+
 
 def get_args():
     """
@@ -60,22 +61,29 @@ def get_valid_lrg_id_list():
     """Uses the EMBL-EBI EB-eye RESTful service to retrieve list of valid files"""
     pass
 
-def fetch_lrg_file(ref, type):
+
+def fetch_lrg_file(ref, lrg_type):
+    print(ref)
+    print(lrg_type)
     pass
 
 
-def get_lrg_id(ref, type):
+def get_lrg_id(ref, lrg_id_type):
     """Uses the EMBL-EBI RESTful API to translate hgnc symbols or external refs into LRG file name"""
     if type == "hgnc":
         url = 'https://www.ebi.ac.uk/ebisearch/ws/rest/lrg?query=name:' + ref
+        response = requests.get(url, allow_redirects=True)
+        root = ElTr.fromstring(response.content)
+        for entry in root.iter('entry'):
+            lrg_id_type = entry.attrib["id"]
     elif type == "xref":
         url = 'https://www.ebi.ac.uk/ebisearch/ws/rest/lrg?query=' + ref
-    response = requests.get(url, allow_redirects=True)
-    root = ET.fromstring(response.content)
+        response = requests.get(url, allow_redirects=True)
+        root = ElTr.fromstring(response.content)
+        for entry in root.iter('entry'):
+            lrg_id_type = entry.attrib["id"]
     # Parse the returned xml file for the LRG file name
-    for entry in root.iter('entry'):
-        lrg_id = entry.attrib["id"]
-    return lrg_id
+    return lrg_id_type
 
 
 def lrg2bed():
@@ -89,12 +97,17 @@ def import_lrg_files():
 
 
 def check_lrg_id(lrg_id):
-    """Checks that an lrg_id is valid"""
+    """
+    Checks that an lrg_id is valid against list of all valid LRG_IDs
+    """
+    print(lrg_id)
     pass
 
 
 def write_bed_file():
-    """Writes a BED file"""
+    """
+    Writes a BED file
+    """
     pass
 
 
@@ -108,27 +121,28 @@ def get_lrg_file(sys_args):
         try:
             lrg_xml = open('LRG_' + str(sys_args.local) + '.xml', 'r')  # Use the local file
             print('LRG_' + str(sys_args.local) + '.xml successfully found and loaded')
-            tree = ET.parse(lrg_xml)
+            tree = ElTr.parse(lrg_xml)
         except IOError:
             print("Could not find LRG_" + str(sys_args.local) + ".xml locally, it was downloaded instead.")
             url = 'ftp://ftp.ebi.ac.uk/pub/databases/lrgex/LRG_' + str(sys_args.local) + '.xml'
             try:  # Check it worked or throw up an error message
                 lrg_xml = urlopen(url)
-                tree = ET.parse(lrg_xml)
+                tree = ElTr.parse(lrg_xml)
                 tree.write(open('LRG_' + str(sys_args.local) + '.xml', 'wb'))  # Write to file
             except Exception as err:
                 print("The file could not be retrieved from the web url - check file name and internet connection?")
                 sys.exit(err)  # Exit with an error
+        return tree
     elif sys_args.web:  # Otherwise they want on from the web, so fetch this
         url = 'ftp://ftp.ebi.ac.uk/pub/databases/lrgex/LRG_' + str(sys_args.web) + '.xml'
         try:  # Check it worked or throw up an error message
             lrg_xml = urlopen(url)
-            tree = ET.parse(lrg_xml)
+            tree = ElTr.parse(lrg_xml)
             tree.write(open('LRG_' + str(sys_args.web) + '.xml', 'wb'))  # Write to file
         except Exception as err:
             print("The file could not be retrieved from the web url - check file name and internet connection")
             sys.exit(err)  # Exit with an error
-    return tree
+        return tree
 
 
 # cmd_line_input = get_args()

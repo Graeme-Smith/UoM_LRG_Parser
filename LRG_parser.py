@@ -56,10 +56,6 @@ def get_valid_lrg_id_list():
     """Uses the EMBL-EBI EB-eye RESTful service to retrieve list of valid files"""
     pass
 
-def fetch_lrg_file(ref, type):
-    pass
-
-
 def get_lrg_id(ref, type):
     """Uses the EMBL-EBI RESTful API to translate hgnc symbols or external refs into LRG file name"""
     if type == "hgnc":
@@ -73,11 +69,14 @@ def get_lrg_id(ref, type):
         lrg_id = entry.attrib["id"]
     return lrg_id
 
+def fetch_lrg_file(ref, type):
+    pass
+
+
 
 def lrg2bed():
     """Parses LRG format files and converts to BED file format"""
     pass
-
 
 
 
@@ -95,25 +94,6 @@ def check_lrg_id(lrg_id):
 def write_bed_file():
     """Writes a BED file"""
     pass
-
-
-def get_args():
-    """
-    Function uses argparse to setup command line arguments and catch errors
-    """
-    parser = argparse.ArgumentParser()
-    file_location = parser.add_mutually_exclusive_group(required=True)
-    file_location.add_argument('-l', '--local', type=int, action='store',
-                               help='Takes the LRG ID and parses a copy of the lrg'
-                                    'file from the local directory. Assumes file is using'
-                                    'the same naming convention as the LRG website.'
-                                    'i.e. LRG_{user input}.xml')
-    file_location.add_argument('-w', '--web', type=int, action='store',
-                               help='Takes the LRG ID and parses a copy of the LRG file '
-                               'from the LRG website')
-    # parser.add_argument('-f', '--file', action='store_true',
-    #                     help="Optional: writes the output to a file instead of to the console.")
-    return parser.parse_args()
 
 
 def get_lrg_file(sys_args):

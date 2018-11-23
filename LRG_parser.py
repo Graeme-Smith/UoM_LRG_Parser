@@ -16,66 +16,40 @@ import xml.etree.ElementTree as ElTr
 # TODO use only urllib or requests not both
 
 
-# """
-# Import Arguments from command line
-# """
-# parser = argparse.ArgumentParser(
-#     description='Downloads and parses Locus Reference Genomic (LRG) files and produces a BED file')
-# file_location = parser.add_mutually_exclusive_group(required=False)
-# file_location.add_argument('-l', '--local', action='store_true',
-#                            help='Takes the LRG ID and parses a copy of the lrg'
-#                                 'file from the local directory instead of from '
-#                                 'the LRG FTP site. Assumes file is using the '
-#                                 'same naming convention as the LRG website.'
-#                                 'i.e. LRG_{user input}.xml. Default is to use web')
-# parser.add_argument('-hgnc', '-g',
-#                     nargs='+',
-#                     help='Import LRG files for conversion into a BED file as per provided HGNC IDs',
-#                     required=False)
-# parser.add_argument('-xref', '-x',
-#                     nargs='+',
-#                     help='Import LRG files for conversion into a BED file as per provided external references',
-#                     required=False)
-# parser.add_argument('-output_dir', '-o',
-#                     type=str,
-#                     help='File path to output BED file. Defaults to current working directory',
-#                     required=False)
-# parser.add_argument('-bed_file', '-b',
-#                     type=str,
-#                     help='Specify the name of the BED file which the script will output. '
-#                          'If not specified will automatically append .bed file suffix',
-#                     required=False)
-# args = parser.parse_args()
+"""
+Import Arguments from command line
+"""
+
+parser = argparse.ArgumentParser(
+    description='Downloads and parses Locus Reference Genomic (LRG) files and produces a BED file')
+file_location = parser.add_mutually_exclusive_group(required=False)
+file_location.add_argument('-l', '--local', action='store_true',
+                           help='Takes the LRG ID and parses a copy of the lrg'
+                                'file from the local directory instead of from '
+                                'the LRG FTP site. Assumes file is using the '
+                                'same naming convention as the LRG website.'
+                                'i.e. LRG_{user input}.xml. Default is to use web')
+parser.add_argument('-hgnc', '-g',
+                    nargs='+',
+                    help='Import LRG files for conversion into a BED file as per provided HGNC IDs',
+                    required=False)
+parser.add_argument('-xref', '-x',
+                    nargs='+',
+                    help='Import LRG files for conversion into a BED file as per provided external references',
+                    required=False)
+parser.add_argument('-output_dir', '-o',
+                    type=str,
+                    help='File path to output BED file. Defaults to current working directory',
+                    required=False)
+parser.add_argument('-bed_file', '-b',
+                    type=str,
+                    help='Specify the name of the BED file which the script will output. '
+                         'If not specified will automatically append .bed file suffix',
+                    required=False)
+args = parser.parse_args()
 
 
 # Import arguments from command line
-
-
-def get_args():
-    """
-    Function uses argparse to setup command line arguments and catch errors
-    """
-    parser = argparse.ArgumentParser(description='Downloads and parses Locus Reference Genomic (LRG) files and producesa BED file')
-    file_location = parser.add_mutually_exclusive_group(required=True)
-    file_location.add_argument('-l', '--local', type=int, action='store', help='Takes the LRG ID and parses a copy of the lrg  file from the local directory. Assumes file is using the same naming convention as the LRG website. i.e. LRG_{user input}.xml')
-    file_location.add_argument('-w', '--web', type=int, action='store', help='Takes the LRG ID and parses a copy of the LRG file from the LRG website')
-    parser.add_argument('-hgnc', '-g', nargs='+', help='Import LRG files for conversion into a BED file as per provided HGNC IDs', required=False)
-    parser.add_argument('-xref', '-x', nargs='+', help='Import LRG files for conversion into a BED file as per provided external references', required=False)
-    parser.add_argument('-output_dir', '-o', type=str, help='File path to output BED file. Defaults to current working directory', required=False)
-    parser.add_argument('-bed_file', '-b', type=str, help='Specify the name of the BED file which the script will output. If not specified will automatically append .bed file suffix', required=False)
-    return parser.parse_args()
-
-
-
-def get_valid_lrg_id_list():
-    """Uses the EMBL-EBI EB-eye RESTful service to retrieve list of valid files"""
-    pass
-
-
-def fetch_lrg_file(ref, lrg_type):
-    print(ref)
-    print(lrg_type)
-    pass
 
 
 def get_lrg_id(ref, lrg_id_type):
@@ -92,7 +66,6 @@ def get_lrg_id(ref, lrg_id_type):
         root = ElTr.fromstring(response.content)
         for entry in root.iter('entry'):
             lrg_id = entry.attrib["id"]
-    # Parse the returned xml file for the LRG file name
     return lrg_id
 
 
@@ -262,36 +235,6 @@ def output_results(tree):
     f.close()
 
 
-def lrg2bed():
-    """Parses LRG format files and converts to BED file format"""
-    pass
-
-
-def import_lrg_files():
-    """Imports multiple requested LRG files"""
-    pass
-
-
-def check_lrg_id(lrg_id):
-    """
-    Checks that an lrg_id is valid against list of all valid LRG_IDs
-    """
-    print(lrg_id)
-    pass
-
-
-def write_bed_file():
-    """
-    Writes a BED file
-    """
-    pass
-
-
-
-def fetch_lrg_file(ref, type):
-    pass
-
-
 ##### Functions to populate the .BED output #####
 
 
@@ -342,16 +285,13 @@ def output_bed(tree):
 
 def main():
 
-    sys_args = args
-    tree = get_lrg_file(sys_args)
-    check_version(tree)
-    output_results(tree)
-    output_bed(tree)
 
     # args = get_args()
     # print(args)  # For debugging
     # Parse commandline args
     # Check if LRG_files have been specified by user:
+
+    # print(tree)
 
     if args.local == True:
         print("hello local")
@@ -369,11 +309,11 @@ def main():
         for xref_ref in args.xref:
             print(get_lrg_id(xref_ref, "xref"))
             tree = get_lrg_file(get_lrg_id(xref_ref, "xref"), local=False)
-    print(tree)
 
     check_version(tree)
     output_results(tree)
-    output_bed(tree)
+    # output_bed(tree)
+
 
 if __name__ == '__main__':  # if this .py script is executing as the main function, the run main()
     main()

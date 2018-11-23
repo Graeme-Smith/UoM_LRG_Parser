@@ -252,14 +252,10 @@ def get_chromosome(tree):
         chrom_dict[mapping_attributes.get("coord_system", "none")] = mapping_attributes
 
     chromosome = list()
-
-    element = tree.find("updatable_annotation/annotation_set[@type='lrg']/mapping")
-    chromosome.append(('chr', element.get("other_name")))
-    # chromosome.append(('chromStart', tree.find('updatable_annotation/annotation_set/mapping/other_start').text))
-    # chromosome.append(('chromEnd', tree.find('updatable_annotationv/annotation_set//mapping/other_end').text))
     chromosome.append(('chr' + chrom_dict['GRCh38.p12']['other_name']))
     chromosome.append((chrom_dict['GRCh38.p12']['other_start']))
     chromosome.append((chrom_dict['GRCh38.p12']['other_end']))
+
     return chromosome
 
 
@@ -268,9 +264,8 @@ def output_bed(tree):
     Output all results to a BED file: runs the 'get' functions and iterates over returned data and prints to file
     """
     results = get_summary_list(tree)
-    filename = results[1][1] + ".txt"
+    filename = results[1][1] + ".BED"
     chromosome = get_chromosome(tree)
-    filename = chromosome[0] + ".BED"
     os.makedirs('output/', exist_ok=True)  # Make the output directory if it doesn't exist
 
     with open('output/' + filename, 'w') as f:
@@ -284,7 +279,6 @@ def output_bed(tree):
 
 
 def main():
-
 
     # args = get_args()
     # print(args)  # For debugging
@@ -312,7 +306,7 @@ def main():
 
     check_version(tree)
     output_results(tree)
-    # output_bed(tree)
+    output_bed(tree)
 
 
 if __name__ == '__main__':  # if this .py script is executing as the main function, the run main()

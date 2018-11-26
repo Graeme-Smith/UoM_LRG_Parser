@@ -20,33 +20,28 @@ import xml.etree.ElementTree as ElTr
 Import Arguments from command line
 """
 
-parser = argparse.ArgumentParser(
+def parser_args():
+    parser = argparse.ArgumentParser(
     description='Downloads and parses Locus Reference Genomic (LRG) files and produces a BED file')
-file_location = parser.add_mutually_exclusive_group(required=False)
-file_location.add_argument('-l', '--local', action='store_true',
-                           help='Takes the LRG ID and parses a copy of the lrg'
-                                'file from the local directory instead of from '
-                                'the LRG FTP site. Assumes file is using the '
-                                'same naming convention as the LRG website.'
-                                'i.e. LRG_{user input}.xml. Default is to use web')
-parser.add_argument('-hgnc', '-g',
-                    nargs='+',
+    file_location = parser.add_mutually_exclusive_group(required=False)
+    file_location.add_argument('-l', '--local', action='store_true',
+                           help='Takes the LRG ID and parses a copy of the lrg file from the local directory instead '
+                                'of from the LRG FTP site. Assumes file is using the same naming convention as the LRG'
+                                ' website. i.e. LRG_{user input}.xml. Default is to use web')
+    parser.add_argument('-hgnc', '-g', nargs='+',
                     help='Import LRG files for conversion into a BED file as per provided HGNC IDs',
                     required=False)
-parser.add_argument('-xref', '-x',
-                    nargs='+',
+    parser.add_argument('-xref', '-x', nargs='+',
                     help='Import LRG files for conversion into a BED file as per provided external references',
                     required=False)
-parser.add_argument('-output_dir', '-o',
-                    type=str,
+    parser.add_argument('-output_dir', '-o', type=str,
                     help='File path to output BED file. Defaults to current working directory',
                     required=False)
-parser.add_argument('-bed_file', '-b',
-                    type=str,
+    parser.add_argument('-bed_file', '-b', type=str,
                     help='Specify the name of the BED file which the script will output. '
                          'If not specified will automatically append .bed file suffix',
                     required=False)
-args = parser.parse_args()
+    return parser.parse_args()
 
 
 # Import arguments from command line
@@ -280,7 +275,7 @@ def output_bed(tree):
 
 def main():
 
-    # args = get_args()
+    args = parser_args()
     # print(args)  # For debugging
     # Parse commandline args
     # Check if LRG_files have been specified by user:

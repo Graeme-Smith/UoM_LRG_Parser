@@ -23,13 +23,13 @@ import xml.etree.ElementTree as ElTr
 
 def parser_args():
     parser = argparse.ArgumentParser(
-        description='Downloads and parses Locus Reference Genomic (LRG) files and produces a BED file')
+        description='Downloads and parses Locus Reference Genomic (LRG) files and produces a .txt and .BED file')
     file_location = parser.add_mutually_exclusive_group(required=False)
     file_location.add_argument(
         '-l', '--local', action='store_true',
-        help='Takes the LRG ID and parses a copy of the lrg file from the local directory instead of from the LRG FTP '
-             'site. Assumes file is using the same naming convention as the LRG website,  i.e. LRG_{user input}.xml. '
-             'Default is to use web.',
+        help='Takes a copy of the lrg file from the local directory instead of from the LRG FTP site. Assumes file is '
+             'using the same naming convention as the LRG website,  i.e. LRG_{user input}.xml. If the file cannot be '
+             'found it is downloaded from the internet instead',
         required=False)
     parser.add_argument(
         '-hgnc', '-g', nargs='+',
@@ -46,7 +46,7 @@ def parser_args():
     parser.add_argument(
         '-bed_file', '-b', type=str,
         help='Specify the name of the BED file which the script will output. If not specified will automatically '
-             'append .bed file suffix',
+             'append .BED file suffix',
         required=False)
     return parser.parse_args()
 
@@ -56,10 +56,10 @@ def parser_args():
 
 def get_lrg_id(ref, lrg_id_type):
     """
-    Uses the EMBL-EBI RESTful API to translate hgnc symbols or external refs into LRG file name
+    Uses the EMBL-EBI RESTful API to translate HGNC symbols or external refs into a LRG file name
     """
 
-    # Parse the returned xml file for the LRG file name
+    # Parse the input arguments, search the web, get LRG file name
 
     if lrg_id_type == "hgnc":
         url = 'https://www.ebi.ac.uk/ebisearch/ws/rest/lrg?query=name:' + ref
@@ -74,8 +74,6 @@ def get_lrg_id(ref, lrg_id_type):
         root = ElTr.fromstring(response.content)
         for entry in root.iter('entry'):
             lrg_id = entry.attrib["id"]
-
-    # There is no action for a specified lrg_id current, new argument input method has broken old function
 
     return lrg_id
 
@@ -93,19 +91,17 @@ def get_lrg_file(lrg_id, local=False):
 
     if local == 1:  # If the user specified a local file
         try:  # Check it worked or throw up an error message
-            lrg_xml = requests.get(url, allow_redirects=True)
-            tree = ElTr.fromstring(lrg_xml.content)  # requests was returning a response so changed to string input
+            lrg_xml = requests.get(url, allow_redirects=True)  # Does not support XML, so need a few fixes
+            tree = ElTr.fromstring(lrg_xml.content)  # requests function returning a 200 response, changed to str input
             # Now an element not an object, needs to be an object to write to file
-            # tree = ElTr.parse(lrg_xml)  # could previously just parse
             tree = ElTr.ElementTree(tree)  # now an object
-            tree.write(open(lrg_id + '.xml', 'wb'))  # Write to file
+            tree.write(open(lrg_id + '.xml', 'wb'))  # write to file
         except IOError:
             print("Could not find " + lrg_id + ".xml locally, it was downloaded instead.")
             try:  # Check it worked or throw up an error message
                 lrg_xml = requests.get(url, allow_redirects=True)
                 tree = ElTr.fromstring(lrg_xml.content)  # requests was returning a response so changed to string input
                 # Now an element not an object, needs to be an object to write to file
-                # tree = ElTr.parse(lrg_xml)  # could previously just parse
                 tree = ElTr.ElementTree(tree)  # now an object
                 tree.write(open(lrg_id + '.xml', 'wb'))  # Write to file
             except Exception as err:
@@ -214,11 +210,19 @@ def get_chromosome(tree):
     Finds chromosome number, start and end positions in the LRG file. Returns them as dictionary of dictionaries.
     """
     chrom_dict = {}
+    strand_dict = {}
     root = tree.getroot()
+
+    # Creates a dictionary for each set of chromosome co-ordinates, collated in a dictionary
 
     for mapping in root.iter('mapping'):
         mapping_attributes = mapping.attrib
         chrom_dict[mapping_attributes.get("coord_system", "none")] = mapping_attributes
+
+    # Get the strand for the GRCh38.p12 coord_system
+
+    element = root.find("updatable_annotation/annotation_set/mapping[@coord_system='GRCh38.p12']/mapping_span")
+    strand_id = element.get("strand")
 
     # Hard coded to find positions only from the GRCh38.p12 assembly
 
@@ -226,6 +230,7 @@ def get_chromosome(tree):
     chromosome.append(('chr' + chrom_dict['GRCh38.p12']['other_name']))
     chromosome.append((chrom_dict['GRCh38.p12']['other_start']))
     chromosome.append((chrom_dict['GRCh38.p12']['other_end']))
+    chromosome.append(strand_id)  # Looks for the strand
 
     return chromosome
 

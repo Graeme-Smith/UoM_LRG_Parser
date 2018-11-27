@@ -61,8 +61,6 @@ def get_lrg_id(ref, lrg_id_type):
 
     # Parse the returned xml file for the LRG file name
 
-    lrg_id = ref  # Otherwise variable could be used at end before assignment
-
     if lrg_id_type == "hgnc":
         url = 'https://www.ebi.ac.uk/ebisearch/ws/rest/lrg?query=name:' + ref
         response = requests.get(url, allow_redirects=True)
@@ -88,22 +86,45 @@ def get_lrg_id(ref, lrg_id_type):
 def get_lrg_file(lrg_id, local=False):
     """
     This pulls the LRG/XML file either locally or from the LRG FTP site and
-    parses using ElementTree. local flag means local file, if false then
+    parses using ElementTree. The "local" flag means a local file is present, if false then
     retrieve file from the LRG website.
     """
-
     url = 'http://ftp.ebi.ac.uk/pub/databases/lrgex/' + lrg_id + '.xml'  # requests doesn't support ftp?
 
-    try:  # Check it worked or throw up an error message
-        lrg_xml = requests.get(url, allow_redirects=True)
-        tree = ElTr.fromstring(lrg_xml.text)  # requests was returning a response so changed to string input
-        tree.write(open(lrg_id + '.xml', 'wb'))  # Write to file
+    if local == 1:  # If the user specified a local file
+        try:  # Check it worked or throw up an error message
+            lrg_xml = requests.get(url, allow_redirects=True)
+            tree = ElTr.fromstring(lrg_xml.content)  # requests was returning a response so changed to string input
+            # Now an element not an object, needs to be an object to write to file
+            # tree = ElTr.parse(lrg_xml)  # could previously just parse
+            tree = ElTr.ElementTree(tree)  # now an object
+            tree.write(open(lrg_id + '.xml', 'wb'))  # Write to file
+        except IOError:
+            print("Could not find " + lrg_id + ".xml locally, it was downloaded instead.")
+            try:  # Check it worked or throw up an error message
+                lrg_xml = requests.get(url, allow_redirects=True)
+                tree = ElTr.fromstring(lrg_xml.content)  # requests was returning a response so changed to string input
+                # Now an element not an object, needs to be an object to write to file
+                # tree = ElTr.parse(lrg_xml)  # could previously just parse
+                tree = ElTr.ElementTree(tree)  # now an object
+                tree.write(open(lrg_id + '.xml', 'wb'))  # Write to file
+            except Exception as err:
+                print("The file could not be retrieved from the web url - check file name and internet connection?")
+                sys.exit(err)  # Exit with an error
+            return tree
 
-    except Exception as err:
-        print("The file could not be retrieved from the web url - check file name and internet connection?")
-        sys.exit(err)  # Exit with an error
-
-    return tree
+    elif local == 0:  # Otherwise they want on from the web, so fetch this
+        try:  # Check it worked or throw up an error message
+            lrg_xml = requests.get(url, allow_redirects=True)
+            tree = ElTr.fromstring(lrg_xml.content)  # requests was returning a response so changed to string input
+            # Now an element not an object, needs to be an object to write to file
+            # tree = ElTr.parse(lrg_xml)  # could previously just parse
+            tree = ElTr.ElementTree(tree)  # now an object
+            tree.write(open(lrg_id + '.xml', 'wb'))  # Write to file
+        except Exception as err:
+            print("The file could not be retrieved from the web url - check file name and internet connection")
+            sys.exit(err)  # Exit with an error
+        return tree
 
 
 # Check the LRG version is correct
@@ -193,7 +214,6 @@ def get_chromosome(tree):
     Finds chromosome number, start and end positions in the LRG file. Returns them as dictionary of dictionaries.
     """
     chrom_dict = {}
-
     root = tree.getroot()
 
     for mapping in root.iter('mapping'):
@@ -270,7 +290,6 @@ def output_bed(tree):
     """
     Output all results to a BED file: runs the 'get' functions and iterates over returned data and prints to file
     """
-
     results = get_summary_list(tree)
     filename = results[1][1] + ".BED"
     chromosome = get_chromosome(tree)
@@ -293,8 +312,6 @@ def main():
     args = parser_args()
 
     # Check if hgnc symbols have been specified by user:
-
-    # tree = get_lrg_file(args)  # Otherwise variable could be used at end before assignment
 
     if args.hgnc is not None:
         for hgnc_ref in args.hgnc:

@@ -1,153 +1,112 @@
 """
-
 Bioinformatics BIOL68400 Programming Assignment: Parser for LRG (XML) files
 Authors: Callum Rakhit and Graeme Smith
 Created: 21st November 2018
 Description: Parses LRG XML files and outputs a BED file
-Usage: See README and documentation.docx for detailed documentation.
-
+Usage: See README and documentation.docx for detailed documentation. Made for Python 3.6.6
 """
 
-# Python 3.5/3.6.6
+# TODO
+#  - Tidy up function that pulls HGNC positions from the LRG file
+#  - Expand .BED file to include strand
+#  - Ensure there are adequate unit tests
+#  - Ensure there is adequate documentation
 
-from urllib.request import urlopen  # Python 3 specific
 import argparse
-# import glob
 import os
-# import pandas as pd
 import requests
 import sys
-# import warnings
 import xml.etree.ElementTree as ElTr
 
-# Import arguments from command line
+# Import Arguments from command line
 
 
-def get_args():
-    """
-    Function uses argparse to setup command line arguments and catch errors
-    """
+def parser_args():
     parser = argparse.ArgumentParser(
-        description='Downloads and parses Locus Reference Genomic (LRG) files and produces a BED file'
-    )
-    file_location = parser.add_mutually_exclusive_group(required=True)
-    file_location.add_argument('-l', '--local', type=int, action='store',
-                               help='Takes the LRG ID and parses a copy of the lrg'
-                                    'file from the local directory. Assumes file is using'
-                                    'the same naming convention as the LRG website.'
-                                    'i.e. LRG_{user input}.xml')
-    file_location.add_argument('-w', '--web', type=int, action='store',
-                               help='Takes the LRG ID and parses a copy of the LRG file '
-                               'from the LRG website')
-    parser.add_argument('-hgnc', '-g',
-                        nargs='+',
-                        help='Import LRG files for conversion into a BED file as per provided HGNC IDs',
-                        required=False)
-    parser.add_argument('-xref', '-x',
-                        nargs='+',
-                        help='Import LRG files for conversion into a BED file as per provided external references',
-                        required=False)
-    parser.add_argument('-output_dir', '-o', type=str,
-                        help='File path to output BED file. Defaults to current working directory',
-                        required=False)
-    parser.add_argument('-bed_file', '-b', type=str,
-                        help='Specify the name of the BED file which the script will output. '
-                             'If not specified will automatically append .bed file suffix',
-                        required=False)
+        description='Downloads and parses Locus Reference Genomic (LRG) files and produces a BED file')
+    file_location = parser.add_mutually_exclusive_group(required=False)
+    file_location.add_argument(
+        '-l', '--local', action='store_true',
+        help='Takes the LRG ID and parses a copy of the lrg file from the local directory instead of from the LRG FTP '
+             'site. Assumes file is using the same naming convention as the LRG website,  i.e. LRG_{user input}.xml. '
+             'Default is to use web.',
+        required=False)
+    parser.add_argument(
+        '-hgnc', '-g', nargs='+',
+        help='Import LRG files for conversion into a BED file as per provided HGNC IDs',
+        required=False)
+    parser.add_argument(
+        '-xref', '-x', nargs='+',
+        help='Import LRG files for conversion into a BED file as per provided external references',
+        required=False)
+    parser.add_argument(
+        '-output_dir', '-o', type=str,
+        help='File path to output BED file. Defaults to current working directory',
+        required=False)
+    parser.add_argument(
+        '-bed_file', '-b', type=str,
+        help='Specify the name of the BED file which the script will output. If not specified will automatically '
+             'append .bed file suffix',
+        required=False)
     return parser.parse_args()
 
 
-def get_valid_lrg_id_list():
-    """Uses the EMBL-EBI EB-eye RESTful service to retrieve list of valid files"""
-    pass
-
-
-def fetch_lrg_file(ref, lrg_type):
-    print(ref)
-    print(lrg_type)
-    pass
+# Get the LRG ID for an inputted HGNC gene name or external cross reference (Ensembl)
 
 
 def get_lrg_id(ref, lrg_id_type):
-    """Uses the EMBL-EBI RESTful API to translate hgnc symbols or external refs into LRG file name"""
-    if type == "hgnc":
+    """
+    Uses the EMBL-EBI RESTful API to translate hgnc symbols or external refs into LRG file name
+    """
+
+    # Parse the returned xml file for the LRG file name
+
+    lrg_id = ref  # Otherwise variable could be used at end before assignment
+
+    if lrg_id_type == "hgnc":
         url = 'https://www.ebi.ac.uk/ebisearch/ws/rest/lrg?query=name:' + ref
         response = requests.get(url, allow_redirects=True)
         root = ElTr.fromstring(response.content)
         for entry in root.iter('entry'):
-            lrg_id_type = entry.attrib["id"]
-    elif type == "xref":
+            lrg_id = entry.attrib["id"]
+
+    elif lrg_id_type == "xref":
         url = 'https://www.ebi.ac.uk/ebisearch/ws/rest/lrg?query=' + ref
         response = requests.get(url, allow_redirects=True)
         root = ElTr.fromstring(response.content)
         for entry in root.iter('entry'):
-            lrg_id_type = entry.attrib["id"]
-    # Parse the returned xml file for the LRG file name
-    return lrg_id_type
+            lrg_id = entry.attrib["id"]
+
+    # There is no action for a specified lrg_id current, new argument input method has broken old function
+
+    return lrg_id
 
 
-def lrg2bed():
-    """Parses LRG format files and converts to BED file format"""
-    pass
+# Find the correct LRG file an inputted HGNC gene name or requested LRG number (e.g. LRG_1)
 
 
-def import_lrg_files():
-    """Imports multiple requested LRG files"""
-    pass
-
-
-def check_lrg_id(lrg_id):
-    """
-    Checks that an lrg_id is valid against list of all valid LRG_IDs
-    """
-    print(lrg_id)
-    pass
-
-
-def write_bed_file():
-    """
-    Writes a BED file
-    """
-    pass
-
-
-##### Load in the file #####
-
-def get_lrg_file(sys_args):
+def get_lrg_file(lrg_id, local=False):
     """
     This pulls the LRG/XML file either locally or from the LRG FTP site and
-    parses using ElementTree. sys_args.local means local file and sys_args.web
-    means retrieve file from the LRG website.
+    parses using ElementTree. local flag means local file, if false then
+    retrieve file from the LRG website.
     """
-    if sys_args.local:  # If the user specified a local file
-        try:
-            lrg_xml = open('LRG_' + str(sys_args.local) + '.xml', 'r')  # Use the local file
-            print('LRG_' + str(sys_args.local) + '.xml successfully found and loaded')
-            tree = ElTr.parse(lrg_xml)
-        except IOError:
-            print("Could not find LRG_" + str(sys_args.local) + ".xml locally, it was downloaded instead.")
-            url = 'ftp://ftp.ebi.ac.uk/pub/databases/lrgex/LRG_' + str(sys_args.local) + '.xml'
-            try:  # Check it worked or throw up an error message
-                lrg_xml = urlopen(url)
-                tree = ElTr.parse(lrg_xml)
-                tree.write(open('LRG_' + str(sys_args.local) + '.xml', 'wb'))  # Write to file
-            except Exception as err:
-                print("The file could not be retrieved from the web url - check file name and internet connection?")
-                sys.exit(err)  # Exit with an error
-        return tree
-    elif sys_args.web:  # Otherwise they want on from the web, so fetch this
-        url = 'ftp://ftp.ebi.ac.uk/pub/databases/lrgex/LRG_' + str(sys_args.web) + '.xml'
-        try:  # Check it worked or throw up an error message
-            lrg_xml = urlopen(url)
-            tree = ElTr.parse(lrg_xml)
-            tree.write(open('LRG_' + str(sys_args.web) + '.xml', 'wb'))  # Write to file
-        except Exception as err:
-            print("The file could not be retrieved from the web url - check file name and internet connection")
-            sys.exit(err)  # Exit with an error
-        return tree
+
+    url = 'http://ftp.ebi.ac.uk/pub/databases/lrgex/' + lrg_id + '.xml'  # requests doesn't support ftp?
+
+    try:  # Check it worked or throw up an error message
+        lrg_xml = requests.get(url, allow_redirects=True)
+        tree = ElTr.fromstring(lrg_xml.text)  # requests was returning a response so changed to string input
+        tree.write(open(lrg_id + '.xml', 'wb'))  # Write to file
+
+    except Exception as err:
+        print("The file could not be retrieved from the web url - check file name and internet connection?")
+        sys.exit(err)  # Exit with an error
+
+    return tree
 
 
-### Check the LRG version is correct #####
+# Check the LRG version is correct
 
 
 def check_version(tree):
@@ -157,7 +116,7 @@ def check_version(tree):
     assert root.get('schema_version') == '1.9', 'Wrong LRG version, should to be 1.9'
 
 
-##### Functions to populate the .txt output #####
+# Functions to populate the .txt or .BED output
 
 
 def get_summary_list(tree):
@@ -229,9 +188,34 @@ def get_exons(tree):
     return results
 
 
+def get_chromosome(tree):
+    """
+    Finds chromosome number, start and end positions in the LRG file. Returns them as dictionary of dictionaries.
+    """
+    chrom_dict = {}
+
+    root = tree.getroot()
+
+    for mapping in root.iter('mapping'):
+        mapping_attributes = mapping.attrib
+        chrom_dict[mapping_attributes.get("coord_system", "none")] = mapping_attributes
+
+    # Hard coded to find positions only from the GRCh38.p12 assembly
+
+    chromosome = list()
+    chromosome.append(('chr' + chrom_dict['GRCh38.p12']['other_name']))
+    chromosome.append((chrom_dict['GRCh38.p12']['other_start']))
+    chromosome.append((chrom_dict['GRCh38.p12']['other_end']))
+
+    return chromosome
+
+
+# Write desired functions to a .txt output
+
+
 def output_results(tree):
     """
-    Output all results to text file: runs the 'get' functions and iterates over returned data and prints
+    Output all results to .txt file: runs the 'get' functions and iterates over returned data and prints
     """
     results = get_summary_list(tree)
     filename = results[1][1] + ".txt"
@@ -279,6 +263,7 @@ def output_results(tree):
     f.close()
 
 
+<<<<<<< HEAD
 ##### Functions to populate the .BED output #####
 
 
@@ -320,33 +305,53 @@ def get_chromosome(tree):
     chromosome.append(('chromStart', tree.find('updatable_annotation/annotation_set/mapping/other_start').text))
     chromosome.append(('chromEnd', tree.find('updatable_annotationv/annotation_set//mapping/other_end').text))
     return chromosome
+=======
+# Write desired functions to a .BED output
+>>>>>>> f3afe039fcbf318e3a8309c1c4a134869ef6a8f1
 
 
 def output_bed(tree):
     """
     Output all results to a BED file: runs the 'get' functions and iterates over returned data and prints to file
     """
+
+    results = get_summary_list(tree)
+    filename = results[1][1] + ".BED"
     chromosome = get_chromosome(tree)
-    filename = chromosome[1][1] + ".BED"
     os.makedirs('output/', exist_ok=True)  # Make the output directory if it doesn't exist
 
     with open('output/' + filename, 'w') as f:
-        f.write()
 
         # Output from the get_chromosome function
 
         for item in chromosome:
-            f.write(item[0] + ": " + item[1] + '\n')
+            f.write(item + '\t')
 
     f.close()
 
 
 def main():
-    """
-    Main function for script - not yet finished.
-    """
-    sys_args = get_args()
-    tree = get_lrg_file(sys_args)
+
+    # Parse commandline args
+
+    args = parser_args()
+
+    # Check if hgnc symbols have been specified by user:
+
+    # tree = get_lrg_file(args)  # Otherwise variable could be used at end before assignment
+
+    if args.hgnc is not None:
+        for hgnc_ref in args.hgnc:
+            tree = (get_lrg_file(get_lrg_id(hgnc_ref, "hgnc"), local=False))
+
+    # Check if external refs have been specified by user:
+
+    elif args.xref is not None:
+        for xref_ref in args.xref:
+            tree = get_lrg_file(get_lrg_id(xref_ref, "xref"), local=False)
+
+    # Check the version of the LRG file and output function results
+
     check_version(tree)
     output_results(tree)
     output_bed(tree)

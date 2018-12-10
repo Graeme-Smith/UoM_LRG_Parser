@@ -10,10 +10,10 @@ Usage: See README for detailed documentation.
 
 import unittest2 as unittest
 
-from LRG_parser import get_summary_list, get_lrg_id
+from lrgParser import get_summary_list, get_lrg_id
 
 class lrgParserTest(unittest.TestCase):
-    """Tests for LRG_parser.py."""
+    """Tests for lrgParser.py."""
 
     def test_get_lrg_id(self):
         """Is LRG ID returned correctly"""

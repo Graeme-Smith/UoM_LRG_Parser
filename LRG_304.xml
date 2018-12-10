@@ -223,7 +223,7 @@
           <email>Suzanne.Kamel-Reid@uhn.ca</email>
         </contact>
       </source>
-      <modification_date>2018-11-26</modification_date>
+      <modification_date>2018-12-10</modification_date>
     </annotation_set>
     <annotation_set type="lrg">
       <source>
@@ -235,7 +235,7 @@
           <email>feedback@lrg-sequence.org</email>
         </contact>
       </source>
-      <modification_date>2018-11-26</modification_date>
+      <modification_date>2018-12-10</modification_date>
       <mapping coord_system="GRCh37.p13" other_end="55326313" other_id="NC_000007.13" other_id_syn="CM000669.1" other_name="7" other_start="55081725" type="other_assembly">
         <mapping_span lrg_end="244589" lrg_start="1" other_end="55326313" other_start="55081725" strand="1">
           <diff lrg_end="184693" lrg_sequence="C" lrg_start="184693" other_end="55266417" other_sequence="T" other_start="55266417" type="mismatch" />
@@ -260,7 +260,7 @@
         </contact>
       </source>
       <comment>Annotation from NG_007726.3</comment>
-      <modification_date>2018-11-22</modification_date>
+      <modification_date>2018-12-06</modification_date>
       <mapping coord_system="NM_001346897.1" other_end="3844" other_id="NM_001346897.1" other_name="NM_001346897.1" other_start="1" type="transcript">
         <mapping_span lrg_end="5334" lrg_start="4990" other_end="345" other_start="1" strand="1" />
         <mapping_span lrg_end="128406" lrg_start="128255" other_end="497" other_start="346" strand="1" />
@@ -441,37 +441,37 @@
         <mapping_span lrg_end="188594" lrg_start="188486" other_end="3517" other_start="3409" strand="1" />
         <mapping_span lrg_end="193307" lrg_start="191225" other_end="5600" other_start="3518" strand="1" />
       </mapping>
-      <mapping coord_system="NM_005228.4" other_end="6353" other_id="NM_005228.4" other_name="NM_005228.4" other_start="1" type="transcript">
-        <mapping_span lrg_end="5334" lrg_start="4990" other_end="345" other_start="1" strand="1" />
-        <mapping_span lrg_end="128406" lrg_start="128255" other_end="497" other_start="346" strand="1" />
-        <mapping_span lrg_end="129457" lrg_start="129274" other_end="681" other_start="498" strand="1" />
-        <mapping_span lrg_end="132709" lrg_start="132575" other_end="816" other_start="682" strand="1" />
-        <mapping_span lrg_end="137331" lrg_start="137263" other_end="885" other_start="817" strand="1" />
-        <mapping_span lrg_end="138633" lrg_start="138515" other_end="1004" other_start="886" strand="1" />
-        <mapping_span lrg_end="140121" lrg_start="139980" other_end="1146" other_start="1005" strand="1" />
-        <mapping_span lrg_end="141915" lrg_start="141799" other_end="1263" other_start="1147" strand="1" />
-        <mapping_span lrg_end="142628" lrg_start="142502" other_end="1390" other_start="1264" strand="1" />
-        <mapping_span lrg_end="142801" lrg_start="142728" other_end="1464" other_start="1391" strand="1" />
-        <mapping_span lrg_end="143722" lrg_start="143632" other_end="1555" other_start="1465" strand="1" />
-        <mapping_span lrg_end="146307" lrg_start="146108" other_end="1755" other_start="1556" strand="1" />
-        <mapping_span lrg_end="147600" lrg_start="147468" other_end="1888" other_start="1756" strand="1" />
-        <mapping_span lrg_end="149792" lrg_start="149702" other_end="1979" other_start="1889" strand="1" />
-        <mapping_span lrg_end="151406" lrg_start="151249" other_end="2137" other_start="1980" strand="1" />
-        <mapping_span lrg_end="157182" lrg_start="157144" other_end="2176" other_start="2138" strand="1" />
-        <mapping_span lrg_end="159093" lrg_start="158952" other_end="2318" other_start="2177" strand="1" />
-        <mapping_span lrg_end="160012" lrg_start="159890" other_end="2441" other_start="2319" strand="1" />
-        <mapping_span lrg_end="160789" lrg_start="160691" other_end="2540" other_start="2442" strand="1" />
-        <mapping_span lrg_end="167447" lrg_start="167262" other_end="2726" other_start="2541" strand="1" />
-        <mapping_span lrg_end="177843" lrg_start="177688" other_end="2882" other_start="2727" strand="1" />
-        <mapping_span lrg_end="178810" lrg_start="178735" other_end="2958" other_start="2883" strand="1" />
-        <mapping_span lrg_end="184832" lrg_start="184686" other_end="3105" other_start="2959" strand="1">
-          <diff lrg_end="184693" lrg_sequence="C" lrg_start="184693" other_end="2966" other_sequence="T" other_start="2966" type="mismatch" />
+      <mapping coord_system="NM_005228.5" other_end="9905" other_id="NM_005228.5" other_name="NM_005228.5" other_start="1" type="transcript">
+        <mapping_span lrg_end="5334" lrg_start="4986" other_end="349" other_start="1" strand="1" />
+        <mapping_span lrg_end="128406" lrg_start="128255" other_end="501" other_start="350" strand="1" />
+        <mapping_span lrg_end="129457" lrg_start="129274" other_end="685" other_start="502" strand="1" />
+        <mapping_span lrg_end="132709" lrg_start="132575" other_end="820" other_start="686" strand="1" />
+        <mapping_span lrg_end="137331" lrg_start="137263" other_end="889" other_start="821" strand="1" />
+        <mapping_span lrg_end="138633" lrg_start="138515" other_end="1008" other_start="890" strand="1" />
+        <mapping_span lrg_end="140121" lrg_start="139980" other_end="1150" other_start="1009" strand="1" />
+        <mapping_span lrg_end="141915" lrg_start="141799" other_end="1267" other_start="1151" strand="1" />
+        <mapping_span lrg_end="142628" lrg_start="142502" other_end="1394" other_start="1268" strand="1" />
+        <mapping_span lrg_end="142801" lrg_start="142728" other_end="1468" other_start="1395" strand="1" />
+        <mapping_span lrg_end="143722" lrg_start="143632" other_end="1559" other_start="1469" strand="1" />
+        <mapping_span lrg_end="146307" lrg_start="146108" other_end="1759" other_start="1560" strand="1" />
+        <mapping_span lrg_end="147600" lrg_start="147468" other_end="1892" other_start="1760" strand="1" />
+        <mapping_span lrg_end="149792" lrg_start="149702" other_end="1983" other_start="1893" strand="1" />
+        <mapping_span lrg_end="151406" lrg_start="151249" other_end="2141" other_start="1984" strand="1" />
+        <mapping_span lrg_end="157182" lrg_start="157144" other_end="2180" other_start="2142" strand="1" />
+        <mapping_span lrg_end="159093" lrg_start="158952" other_end="2322" other_start="2181" strand="1" />
+        <mapping_span lrg_end="160012" lrg_start="159890" other_end="2445" other_start="2323" strand="1" />
+        <mapping_span lrg_end="160789" lrg_start="160691" other_end="2544" other_start="2446" strand="1" />
+        <mapping_span lrg_end="167447" lrg_start="167262" other_end="2730" other_start="2545" strand="1" />
+        <mapping_span lrg_end="177843" lrg_start="177688" other_end="2886" other_start="2731" strand="1" />
+        <mapping_span lrg_end="178810" lrg_start="178735" other_end="2962" other_start="2887" strand="1" />
+        <mapping_span lrg_end="184832" lrg_start="184686" other_end="3109" other_start="2963" strand="1">
+          <diff lrg_end="184693" lrg_sequence="C" lrg_start="184693" other_end="2970" other_sequence="T" other_start="2970" type="mismatch" />
         </mapping_span>
-        <mapping_span lrg_end="186382" lrg_start="186285" other_end="3203" other_start="3106" strand="1" />
-        <mapping_span lrg_end="187324" lrg_start="187157" other_end="3371" other_start="3204" strand="1" />
-        <mapping_span lrg_end="187751" lrg_start="187704" other_end="3419" other_start="3372" strand="1" />
-        <mapping_span lrg_end="188594" lrg_start="188486" other_end="3528" other_start="3420" strand="1" />
-        <mapping_span lrg_end="194049" lrg_start="191225" other_end="6353" other_start="3529" strand="1" />
+        <mapping_span lrg_end="186382" lrg_start="186285" other_end="3207" other_start="3110" strand="1" />
+        <mapping_span lrg_end="187324" lrg_start="187157" other_end="3375" other_start="3208" strand="1" />
+        <mapping_span lrg_end="187751" lrg_start="187704" other_end="3423" other_start="3376" strand="1" />
+        <mapping_span lrg_end="188594" lrg_start="188486" other_end="3532" other_start="3424" strand="1" />
+        <mapping_span lrg_end="197597" lrg_start="191225" other_end="9905" other_start="3533" strand="1" />
       </mapping>
       <mapping coord_system="NM_201282.1" other_end="2239" other_id="NM_201282.1" other_name="NM_201282.1" other_start="1" type="transcript">
         <mapping_span lrg_end="5334" lrg_start="5001" other_end="334" other_start="1" strand="1" />
@@ -543,13 +543,13 @@
           <db_xref accession="CCDS87506.1" source="CCDS" />
           <db_xref accession="CCDS87507.1" source="CCDS" />
           <db_xref accession="399923581" source="GI" />
-          <transcript accession="NM_005228.4" source="RefSeq">
-            <coordinates coord_system="LRG_304" end="194049" start="4990" strand="1" />
+          <transcript accession="NM_005228.5" source="RefSeq">
+            <coordinates coord_system="LRG_304" end="197597" start="4986" strand="1" />
             <long_name>epidermal growth factor receptor, transcript variant 1</long_name>
             <db_xref accession="1956" source="GeneID" />
-            <db_xref accession="1101020099" source="GI" />
+            <db_xref accession="1519245592" source="GI" />
             <exon accession="" source="RefSeq">
-              <coordinates coord_system="LRG_304" end="5334" start="4990" strand="1" />
+              <coordinates coord_system="LRG_304" end="5334" start="4986" strand="1" />
             </exon>
             <exon accession="" source="RefSeq">
               <coordinates coord_system="LRG_304" end="128406" start="128255" strand="1" />
@@ -630,7 +630,7 @@
               <coordinates coord_system="LRG_304" end="188594" start="188486" strand="1" />
             </exon>
             <exon accession="" source="RefSeq">
-              <coordinates coord_system="LRG_304" end="194049" start="191225" strand="1" />
+              <coordinates coord_system="LRG_304" end="197597" start="191225" strand="1" />
             </exon>
             <protein_product accession="NP_005219.2" source="RefSeq">
               <coordinates coord_system="LRG_304" end="191586" start="5247" strand="1" />
@@ -1383,6 +1383,7 @@
           <long_name>EGFR long non-coding downstream RNA</long_name>
           <db_xref accession="102725541" source="GeneID" />
           <db_xref accession="HGNC:49511" source="HGNC" />
+          <db_xref accession="618217" source="MIM" />
           <transcript accession="NR_110426.1" source="RefSeq">
             <coordinates coord_system="LRG_304" end="241604" start="224405" strand="-1" />
             <long_name>EGFR long non-coding downstream RNA</long_name>
@@ -1421,7 +1422,7 @@
         </contact>
       </source>
       <comment>Annotation is based on Ensembl release 94 (GRCh38  primary assembly)</comment>
-      <modification_date>2018-11-26</modification_date>
+      <modification_date>2018-12-10</modification_date>
       <mapping coord_system="ENST00000275493.6" other_end="9821" other_id="ENST00000275493.6" other_name="ENST00000275493.6" other_start="1" type="transcript">
         <mapping_span lrg_end="5334" lrg_start="5070" other_end="265" other_start="1" strand="1" />
         <mapping_span lrg_end="128406" lrg_start="128255" other_end="417" other_start="266" strand="1" />
@@ -2254,7 +2255,7 @@
         <name>List of locus specific databases for EGFR</name>
         <url>http://grenada.lumc.nl/LSDB_list/lsdbs/EGFR</url>
       </source>
-      <modification_date>2018-11-26</modification_date>
+      <modification_date>2018-12-10</modification_date>
     </annotation_set>
   </updatable_annotation>
 </lrg>

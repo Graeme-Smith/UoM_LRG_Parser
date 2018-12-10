@@ -61,6 +61,8 @@ def get_lrg_id(ref, lrg_id_type):
 
     # Parse the input arguments, search the web, get LRG file name
 
+    lrg_id = 0
+
     if lrg_id_type == "hgnc":
         url = 'https://www.ebi.ac.uk/ebisearch/ws/rest/lrg?query=name:' + ref
         response = requests.get(url, allow_redirects=True)
@@ -210,7 +212,6 @@ def get_chromosome(tree):
     Finds chromosome number, start and end positions in the LRG file. Returns them as dictionary of dictionaries.
     """
     chrom_dict = {}
-    strand_dict = {}
     root = tree.getroot()
 
     # Creates a dictionary for each set of chromosome co-ordinates, collated in a dictionary
@@ -316,7 +317,9 @@ def main():
 
     args = parser_args()
 
-    # Check if hgnc symbols have been specified by user:
+    # Check if HGNC symbols have been specified by user:
+
+    tree = 0
 
     if args.hgnc is not None:
         for hgnc_ref in args.hgnc:

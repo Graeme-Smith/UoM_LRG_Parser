@@ -9,4 +9,3 @@ The tool parses LRG (XML) files and saves the extracted information as a BED fil
 Created on 21st November 2018
 
 Please see the documentation.docx for more a more detailed explaination on the usage of this tool.
-

@@ -28,25 +28,16 @@ def parser_args():
     file_location.add_argument(
         '-l', '--local', action='store_true',
         help='Takes a copy of the lrg file from the local directory instead of from the LRG FTP site. Assumes file is '
-             'using the same naming convention as the LRG website,  i.e. LRG_{user input}.xml. If the file cannot be '
-             'found it is downloaded from the internet instead',
+             'using the same naming convention as the LRG website, e.g. LRG_{user input}.xml. If the file cannot be '
+             'found it is downloaded from the internet instead.',
         required=False)
     parser.add_argument(
         '-hgnc', '-g', nargs='+',
-        help='Import LRG files for conversion into a BED file as per provided HGNC IDs',
+        help='Import LRG files for conversion into a BED file as per provided HGNC IDs.',
         required=False)
     parser.add_argument(
         '-xref', '-x', nargs='+',
-        help='Import LRG files for conversion into a BED file as per provided external references',
-        required=False)
-    parser.add_argument(
-        '-output_dir', '-o', type=str,
-        help='File path to output BED file. Defaults to current working directory',
-        required=False)
-    parser.add_argument(
-        '-bed_file', '-b', type=str,
-        help='Specify the name of the BED file which the script will output. If not specified will automatically '
-             'append .BED file suffix',
+        help='Import LRG files for conversion into a BED file as per provided external references.',
         required=False)
     return parser.parse_args()
 
@@ -61,7 +52,7 @@ def get_lrg_id(ref, lrg_id_type):
 
     # Parse the input arguments, search the web, get LRG file name
 
-    lrg_id = 0
+    lrg_id = ()
 
     if lrg_id_type == "hgnc":
         url = 'https://www.ebi.ac.uk/ebisearch/ws/rest/lrg?query=name:' + ref
@@ -197,13 +188,13 @@ def get_exons(tree):
     """
     results = {}
     transcripts = tree.findall('fixed_annotation/transcript')
-    for ts in transcripts:
-        transcript_id = tree.find('fixed_annotation/id').text + ts.attrib['name']
+    for trans in transcripts:
+        transcript_id = tree.find('fixed_annotation/id').text + trans.attrib['name']
         results[transcript_id] = {}
-        for e in ts.findall('exon'):
-            for coord in e:
+        for ex in trans.findall('exon'):
+            for coord in ex:
                 if (coord.attrib['coord_system']) == transcript_id:
-                    results[transcript_id][e.attrib['label']] = (coord.attrib['start'], coord.attrib['end'])
+                    results[transcript_id][ex.attrib['label']] = (coord.attrib['start'], coord.attrib['end'])
     return results
 
 
@@ -259,7 +250,7 @@ def output_results(tree):
 
         f.write("\nLRG Assemblies:\n---------------\n")
         assemblies = get_assemblies(tree)
-        f.write("Assembly\t Genomic coordinates\t Strand\n")
+        f.write("Assembly\t Genomic Coordinates\t Strand\n")
         for key1, value1 in assemblies.items():
             f.write(key1 + " \t " + assemblies[key1]['start'] + " - " + assemblies[key1]['end']
                     + " \t " + assemblies[key1]['strand'] + "\n")
@@ -268,7 +259,7 @@ def output_results(tree):
 
         differences = get_differences(tree)
         for key1, value1 in differences.items():
-            f.write("\nDifferences with reference Seq:" + key1 + "\n---------------\n")
+            f.write("\nDifferences with reference sequence:" + key1 + "\n---------------\n")
             f.write("Type\t\tChange\t\tLRG coordinates\n")
             for key2, value2 in value1.items():
                 f.write(value2['type'] + " \t" + value2['lrg_sequence'] + ">" + value2['other_sequence'] +
@@ -319,13 +310,13 @@ def main():
 
     # Check if HGNC symbols have been specified by user:
 
-    tree = 0
+    tree = ()
+
+    # Check if external refs have been specified by user:
 
     if args.hgnc is not None:
         for hgnc_ref in args.hgnc:
             tree = (get_lrg_file(get_lrg_id(hgnc_ref, "hgnc"), local=False))
-
-    # Check if external refs have been specified by user:
 
     elif args.xref is not None:
         for xref_ref in args.xref:

@@ -8,25 +8,27 @@ Usage: See README for detailed documentation.
 
 """
 
-import unittest2 as unittest
+# TODO write relevant tests
 
-from lrgParser import get_summary_list, get_lrg_id
+import unittest
 
-class lrgParserTest(unittest.TestCase):
+from lrgParser import get_lrg_id
+
+
+class LrgParserTest(unittest.TestCase):
     """Tests for lrgParser.py."""
 
     def test_get_lrg_id(self):
         """Is LRG ID returned correctly"""
-        self.assertEquals(get_lrg_id("COL1A1", "hgnc"),"LRG_1",
+        self.assertEquals(get_lrg_id("COL1A1", "hgnc"), "LRG_1",
                           msg="ERROR: ID returned by get_lrg_id() does not match expected output")
-        self.assertEquals(get_lrg_id("COL1A2", "hgnc"),"LRG_2",
+        self.assertEquals(get_lrg_id("COL1A2", "hgnc"), "LRG_2",
                           msg="ERROR: ID returned by get_lrg_id() does not match expected output")
-        self.assertEquals(get_lrg_id("NG_007400.1", "xref"),"LRG_1",
+        self.assertEquals(get_lrg_id("NG_007400.1", "xref"), "LRG_1",
                           msg="ERROR: ID returned by get_lrg_id() does not match expected output")
-        self.assertEquals(get_lrg_id("NG_007405.1", "xref"),"LRG_2",
+        self.assertEquals(get_lrg_id("NG_007405.1", "xref"), "LRG_2",
                           msg="ERROR: ID returned by get_lrg_id() does not match expected output")
 
-# TODO write relevant tests
 
 if __name__ == '__main__':
     unittest.main()

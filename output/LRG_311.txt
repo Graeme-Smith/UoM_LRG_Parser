@@ -1,0 +1,40 @@
+File Summary:
+---------------
+Gene: PTEN
+LRG version: LRG_311
+HGNC ID: 9588
+Sequence source: NG_007466.2
+
+LRG Assemblies:
+---------------
+Assembly	 Genomic coordinates	 Strand
+GRCh37.p13 	 89618195 - 89733687 	 1
+GRCh38.p12 	 87858438 - 87973930 	 1
+
+Differences with reference Seq:GRCh37.p13
+---------------
+Type		Change		LRG coordinates
+other_ins 	->T		5666 - 5667
+mismatch 	C>G		5706 - 5706
+
+Differences with reference Seq:GRCh38.p12
+---------------
+Type		Change		LRG coordinates
+other_ins 	->T		5666 - 5667
+mismatch 	C>G		5706 - 5706
+mismatch 	C>T		68876 - 68876
+
+Exon details:
+---------------
+Transcript ID: LRG_311t1
+Exon no.	LRG coordinates
+1:		1-1110
+2:		1111-1195
+3:		1196-1240
+4:		1241-1284
+5:		1285-1523
+6:		1524-1665
+7:		1666-1832
+8:		1833-2057
+9:		2058-5546
+

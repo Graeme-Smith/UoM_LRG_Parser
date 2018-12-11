@@ -1,0 +1,57 @@
+File Summary:
+---------------
+Gene: EGFR
+LRG version: LRG_304
+HGNC ID: 3236
+Sequence source: NG_007726.3
+
+LRG Assemblies:
+---------------
+Assembly	 Genomic Coordinates	 Strand
+GRCh37.p13 	 55081725 - 55326313 	 1
+GRCh38.p12 	 55014032 - 55258620 	 1
+
+Differences with reference sequence:GRCh37.p13
+---------------
+Type		Change		LRG coordinates
+mismatch 	C>T		184693 - 184693
+
+Differences with reference sequence:GRCh38.p12
+---------------
+Type		Change		LRG coordinates
+mismatch 	T>G		27108 - 27108
+mismatch 	C>T		184693 - 184693
+
+Exon details:
+---------------
+Transcript ID: LRG_304t1
+Exon no.	LRG coordinates
+1:		1-334
+2:		335-486
+3:		487-670
+4:		671-805
+5:		806-874
+6:		875-993
+7:		994-1135
+8:		1136-1252
+9:		1253-1379
+10:		1380-1453
+11:		1454-1544
+12:		1545-1744
+13:		1745-1877
+14:		1878-1968
+15:		1969-2126
+16:		2127-2165
+17:		2166-2307
+18:		2308-2430
+19:		2431-2529
+20:		2530-2715
+21:		2716-2871
+22:		2872-2947
+23:		2948-3094
+24:		3095-3192
+25:		3193-3360
+26:		3361-3408
+27:		3409-3517
+28:		3518-5600
+

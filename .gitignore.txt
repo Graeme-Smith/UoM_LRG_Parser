@@ -1,3 +1,8 @@
+# Ignore any locally downloaded .xml files
+
 *.XML
+
+# Ignore the directory containing all the .txt and .BED output files
+
 ./out*
 /output*

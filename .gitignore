@@ -6,3 +6,8 @@
 
 ./out*
 /output*
+output
+
+# Ignore ~lock for docs
+
+*.~lock*

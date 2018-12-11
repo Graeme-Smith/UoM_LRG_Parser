@@ -1,6 +1,6 @@
 # Ignore any locally downloaded .xml files
 
-*.XML
+*.xml
 
 # Ignore the directory containing all the .txt and .BED output files
 

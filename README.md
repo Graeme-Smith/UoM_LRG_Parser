@@ -12,13 +12,13 @@ The .BED file contains the chromosome number, genomic coordinates (GRCh38.p12) a
 
 It can be used to parse a local LRG file:
 
-`python3 Lab_Activity_Data.R -l path/to/your/local/lrg_file.xml`
+`python3 lrgParser.py -l path/to/your/local/lrg_file.xml`
 
-Also note that if the LRG_ID.xml file you specified is not found the relevant LRG_ID.xml will be downloaded instead, e.g. LRG_1.xml.
+If the LRG_ID.xml file you specified is not found the relevant LRG_ID.xml will be downloaded instead, e.g. LRG_1.xml.
 
 The tool can download the relevant LRG file based on a HGNC gene name or LRG file ID:
 
-`python3 Lab_Activity_Data.R -g EGFR`
+`python3 lrgParser.py -g EGFR`
 
 Created on 21st November 2018.
 

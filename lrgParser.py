@@ -222,7 +222,16 @@ def get_chromosome(tree):
     chromosome.append(('chr' + chrom_dict['GRCh38.p12']['other_name']))
     chromosome.append((chrom_dict['GRCh38.p12']['other_start']))
     chromosome.append((chrom_dict['GRCh38.p12']['other_end']))
+    # name
+    # chromosome.append(('LRG version', tree.find('fixed_annotation/id').text))
+    # score (0-100)
     chromosome.append(strand_id)  # Looks for the strand
+    # thickStart
+    # thickEnd
+    # itemRgb
+    # blockCount
+    # blockSizes
+    # blockStarts
 
     return chromosome
 
@@ -296,8 +305,18 @@ def output_bed(tree):
 
         # Output from the get_chromosome function
 
-        for item in chromosome:
-            f.write(item + '\t')
+        f.write("track name=")
+        f.write('"' + str(results[0][1]) + '"' + '\n')  # Writes the gene name
+
+        # for item in results:
+
+        f.write(str(chromosome[0]) + '\t')  # Writes the chromosome number
+        f.write(str(chromosome[1]) + '\t')  # Writes the start coordinate
+        f.write(str(chromosome[2]) + '\t')  # Writes the start coordinate
+        f.write(str(results[1][1]) + '\t')  # Writes LRG number (name)
+        f.write(str("0") + '\t')  # Write score(0-100)
+        f.write(str(chromosome[3][0]) + '\t')  # Writes the strand
+        # f.write((str('LRG version', tree.find('fixed_annotation/id').text) + '\n'))
 
     f.close()
 

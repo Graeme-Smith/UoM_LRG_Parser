@@ -7,11 +7,11 @@ Sequence source: NG_007400.1
 
 LRG Assemblies:
 ---------------
-Assembly	 Genomic coordinates	 Strand
+Assembly	 Genomic Coordinates	 Strand
 GRCh37.p13 	 48259457 - 48284000 	 -1
 GRCh38.p12 	 50182096 - 50206639 	 -1
 
-Differences with reference Seq:GRCh37.p13
+Differences with reference sequence:GRCh37.p13
 ---------------
 Type		Change		LRG coordinates
 mismatch 	G>A		18506 - 18506

@@ -4,7 +4,7 @@
 
 #### A LRG parser by Graeme Smith and Callum Rakhit, created for the BIOL68400 Bioinformatics Programming Assignment
 
-`lrgParser.py` is a [Python3](https://www.python.org/download/releases/3.0/) script which parses LRG (XML) files and saves the extracted information as a .txt and .BED file. 
+`lrgParser.py` is a [Python3](https://www.python.org/download/releases/3.0/) script which parses LRG (XML) files and saves the extracted information as a .txt and a .BED file. 
 
 The .txt file contains details on the gene (HGNC naming format), LRG version, HGNC ID, sequence source, LRG assembly version, exons, and differences between the genomic reference sequences.
 
